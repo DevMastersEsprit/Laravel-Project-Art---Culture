@@ -39,6 +39,8 @@ Route::get('/', function () {return redirect('/dashboard');})->middleware('auth'
 
 
     Route::resource('places', \App\Http\Controllers\PlaceController::class);
+    Route::put('/places/{id}', [PlaceController::class, 'update'])->name('places.update');
+
 	Route::get('/dashboard', [HomeController::class, 'index'])->name('home')->middleware('auth');
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('/virtual-reality', [PageController::class, 'vr'])->name('virtual-reality');

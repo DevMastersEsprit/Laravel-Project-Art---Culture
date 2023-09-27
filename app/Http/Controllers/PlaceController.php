@@ -71,8 +71,13 @@ class PlaceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {
-    }
+{
+    // Récupérer la place à éditer en utilisant l'ID
+    $place = Place::findOrFail($id);
+
+    // Passer la place à la vue "edit.blade.php" pour l'affichage du formulaire
+    return view('pages.place.edit', compact('place'));
+}
 
     /**
      * Update the specified resource in storage.
@@ -82,10 +87,30 @@ class PlaceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
+{
+    // Valider les données du formulaire
+    $request->validate([
+        'nom' => 'required|string|max:255', // Vous pouvez ajuster les règles de validation selon vos besoins
+        'adresse' => 'required|string|max:255', // Vous pouvez ajuster les règles de validation selon vos besoins
+    ]);
 
+    // Trouver la place à mettre à jour
+    $place = Place::find($id);
 
+    if (!$place) {
+        return redirect()->route('places.index')->with('error', 'Place non trouvée.');
     }
+
+    // Mettre à jour les propriétés de la place avec les nouvelles valeurs
+    $place->nom = $request->input('nom');
+    $place->adresse = $request->input('adresse');
+
+    // Enregistrer les modifications dans la base de données
+    $place->save();
+
+    return redirect()->route('places.index')->with('success', 'Place mise à jour avec succès.');
+}
+
 
     /**
      * Remove the specified resource from storage.

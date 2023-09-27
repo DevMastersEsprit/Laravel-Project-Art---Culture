@@ -1,4 +1,7 @@
-
+<header class="card-header">
+            <p class="card-header-title">Places</p>
+            <a class="button is-info" href="{{ route('places.create') }}">Ajouter un Produit</a>
+        </header>
                     <tbody>
 
                     @foreach($places as $place)

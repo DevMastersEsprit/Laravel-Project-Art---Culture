@@ -1,11 +1,11 @@
-@section('content')
+
     <div class="card">
         <header class="card-header">
-            <p class="card-header-title">Création lieu/p>
+            <p class="card-header-title">Création lieu</p>
         </header>
         <div class="card-content">
             <div class="content">
-                <form action="{{ route('place.store') }}" method="POST">
+                <form action="{{ route('places.store') }}" method="POST">
                     @csrf
                     <div class="field">
                         <label class="label">Nom</label>
@@ -36,4 +36,4 @@
             </div>
         </div>
     </div>
-@endsection
+
