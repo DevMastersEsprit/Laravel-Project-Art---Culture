@@ -42,6 +42,7 @@ Route::get('/', function () {return redirect('/dashboard');})->middleware('auth'
     Route::put('/places/{id}', [PlaceController::class, 'update'])->name('places.update');
 
 	Route::get('/dashboard', [HomeController::class, 'index'])->name('home')->middleware('auth');
+
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('/virtual-reality', [PageController::class, 'vr'])->name('virtual-reality');
 	Route::get('/rtl', [PageController::class, 'rtl'])->name('rtl');
@@ -50,7 +51,9 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/profile-static', [PageController::class, 'profile'])->name('profile-static');
 	Route::get('/sign-in-static', [PageController::class, 'signin'])->name('sign-in-static');
 	Route::get('/sign-up-static', [PageController::class, 'signup'])->name('sign-up-static');
-	Route::get('/{page}', [PageController::class, 'index'])->name('page');
+    Route::get('/{page}', [PlaceController::class, 'index'])->name('page');
+    Route::delete('/places/{id}', [PlaceController::class, 'index'])->name('places.destroy');
+
 	Route::post('logout', [LoginController::class, 'logout'])->name('logout');
    // Route::get('/places', PlaceController::class);
 
