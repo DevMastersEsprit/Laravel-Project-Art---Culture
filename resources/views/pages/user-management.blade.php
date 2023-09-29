@@ -129,7 +129,7 @@
     </script>
 
   <!-- Ajoutez le script JavaScript pour gérer le basculement -->
-<script>
+  <script>
     document.addEventListener("DOMContentLoaded", function () {
         const editButtons = document.querySelectorAll(".edit-btn");
         editButtons.forEach((editButton) => {
@@ -149,15 +149,19 @@
             deleteButton.addEventListener("click", function () {
                 var placeId = this.getAttribute('data-place-id');
 
-                // Afficher la boîte de dialogue de confirmation
+                // Afficher une alerte de confirmation
                 if (confirm('Êtes-vous sûr de vouloir supprimer cet élément ?')) {
                     // Rediriger vers la route de suppression si l'utilisateur confirme
                     window.location.href = '/places'; // Remplacez par votre route de suppression
+                } else {
+                    // L'utilisateur a annulé la suppression, vous pouvez afficher une alerte annulée
+                    alert('Suppression annulée.');
                 }
             });
         });
     });
 </script>
+
 
 @endsection
 
