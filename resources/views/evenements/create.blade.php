@@ -1,0 +1,72 @@
+@extends('layouts.app')
+
+@section('content')
+    @include('layouts.navbars.auth.topnav', ['title' => 'Event Management'])
+
+    <div class="row mt-4 mx-4">
+        <div class="col-12">
+            @if ($message = Session::get('success'))
+                <div class="alert alert-success" role="alert">
+                    <p>{{ $message }}</p>
+                </div>
+            @endif
+
+            <div class="card mb-4">
+                <div class="card-header pb-0 d-flex justify-content-between">
+                    <h6>Events</h6>
+                    <div class="pull-right mb-2">
+                        <a class="btn btn-success" href="{{ route('events.create') }}"> Create event</a>
+                    </div>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <strong>Event Name:</strong>
+                                    <input type="text" name="nom" class="form-control" placeholder="Event Name">
+                                    @error('nom')
+                                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <strong>Start date:</strong>
+                                    <input type="datetime-local" name="dateDebut" class="form-control">
+                                    @error('dateDebut')
+                                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <strong>End date:</strong>
+                                    <input type="datetime-local" name="dateFin" class="form-control">
+                                    @error('dateFin')
+                                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <strong>Description:</strong>
+                                    <textarea name="description"></textarea>
+                                    @error('description')
+                                        <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary ml-3">Submit</button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
