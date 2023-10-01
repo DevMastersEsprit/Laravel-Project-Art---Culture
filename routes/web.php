@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActorManagementController;
 use App\Http\Controllers\EvenementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;

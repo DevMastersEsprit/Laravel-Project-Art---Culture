@@ -21130,7 +21130,7 @@ hr.horizontal.gray-light {
   letter-spacing: 0.04em;
 }
 .navbar-vertical.navbar-expand-xs {
-  display: block;
+  /* display: block; */
   position: fixed;
   top: 0;
   bottom: 0;
