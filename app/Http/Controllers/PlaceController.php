@@ -15,7 +15,7 @@ class PlaceController extends Controller
     public function index()
     {
         $places = Place::all();
-        return view('pages.user-management', compact('places'));
+        return view('pages.place-management', compact('places'));
     }
 
     /**
