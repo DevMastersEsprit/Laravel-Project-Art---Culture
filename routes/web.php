@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActorManagementController;
 use App\Http\Controllers\EvenementController;
+use App\Http\Controllers\PlaceController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PageController;
