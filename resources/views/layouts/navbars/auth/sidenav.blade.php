@@ -7,6 +7,10 @@
         <a href="{{ route('home') }}" target="_blank">
             <img style="width: 100%;" src="{{ asset('img/logo.png') }}" alt="main_logo">
         </a>
+        {{-- <a class="navbar-brand m-0" href="{{ route('home') }}"
+            target="_blank">
+            <img src="./img/spectral.png" class="navbar-brand-img" width="100" height="400" alt="main_logo">
+        </a> --}}
     </div>
     {{-- <hr class="horizontal dark mt-0"> --}}
     <div class="collapse navbar-collapse w-auto mt-4"  id="sidenav-collapse-main">
@@ -38,13 +42,11 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ str_contains(request()->url(), 'user-management') == true ? 'active' : '' }}"
-                    href="{{ route('page', ['page' => 'user-management']) }}">
-                    <div
-                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                <a class="nav-link {{ str_contains(request()->url(), 'place-management') == true ? 'active' : '' }}" href="{{ route('page', ['page' => 'place-management']) }}">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-bullet-list-67 text-dark text-sm opacity-10"></i>
                     </div>
-                    <span class="nav-link-text ms-1">User Management</span>
+                    <span class="nav-link-text ms-1">Place Management</span>
                 </a>
             </li>
             <li class="nav-item mt-3">

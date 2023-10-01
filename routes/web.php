@@ -43,6 +43,8 @@ Route::put('actor-management', [ActorManagementController::class, 'update'])->na
 
 // Delete the resource (DELETE)
 Route::delete('actor-management/{id}', [ActorManagementController::class, 'destroy'])->name('actor-management.destroy');
+Route::resource('places', \App\Http\Controllers\PlaceController::class);
+Route::put('/places/{id}', [\App\Http\Controllers\PlaceController::class, 'update'])->name('places.update');
 Route::get('/', function () {
 	return redirect('/dashboard'); })->middleware('auth');
 Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
@@ -68,6 +70,10 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('/profile-static', [PageController::class, 'profile'])->name('profile-static');
 	Route::get('/sign-in-static', [PageController::class, 'signin'])->name('sign-in-static');
 	Route::get('/sign-up-static', [PageController::class, 'signup'])->name('sign-up-static');
-	Route::get('/{page}', [PageController::class, 'index'])->name('page');
+    Route::get('/{page}', [PlaceController::class, 'index'])->name('page');
+    Route::delete('/places/{id}', [PlaceController::class, 'index'])->name('places.destroy');
+
 	Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+   // Route::get('/places', PlaceController::class);
+
 });
