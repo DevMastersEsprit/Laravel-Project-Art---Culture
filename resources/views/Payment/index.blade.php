@@ -217,6 +217,10 @@
                         @method('DELETE')
                         <button class="btn btn-primary btn-sm" type="link" onclick="return confirm('Are you sure you want to delete this payment?')">Delete</button>
                     </form></td>
+
+                   <td class="align-middle text-center">
+    <a class="btn btn-primary btn-sm" href="{{ route('payments.show', $payment->id) }}">Details</a>
+</td>
                                                     </td>
 
 

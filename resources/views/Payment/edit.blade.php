@@ -2,18 +2,18 @@
 
 @section('content')
     <div class="container">
-        <h1>Édition du Paiement</h1>
+        <h1>Edit payment</h1>
 
         <form method="POST" action="{{route('payments.update', $payment->id) }}">
             @csrf
             @method('PUT')
             <div class="form-group">
-                <label for="amount">Montant</label>
+                <label for="amount">Amount</label>
                 <input type="number" class="form-control" id="amount" name="amount" value="{{ $payment->amount }}">
             </div>
 
             <div class="form-group">
-                <label for="payment_method">Méthode de Paiement</label>
+                <label for="payment_method">Payment method</label>
                 <select class="form-control" id="payment_method" name="payment_method">
                     <option value="Credit Card" @if ($payment->payment_method === 'Credit Card') selected @endif>Credit Card</option>
                     <option value="PayPal" @if ($payment->payment_method === 'PayPal') selected @endif>PayPal</option>
@@ -28,7 +28,7 @@
             </div>
 
 
-            <button type="submit" class="btn btn-primary">Mettre à jour le Paiement</button>
+            <button type="submit" class="btn btn-primary">Update</button>
         </form>
     </div>
 @endsection
