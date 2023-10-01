@@ -23,8 +23,26 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ResetPassword;
-use App\Http\Controllers\ChangePassword;            
-            
+use App\Http\Controllers\ChangePassword; 
+use App\Http\Controllers\ActorManagementController;
+      
+// Route::resource('actor-management', \App\Http\Controllers\ActorManagementController::class);
+
+// Get the resource (GET)
+Route::get('actor-management', [ActorManagementController::class, 'index'])->name('actor-management.index');
+Route::get('actor-management-create', [ActorManagementController::class, 'create'])->name('actor-management.create');
+// Route::get('actor-management/{id}', [ActorManagementController::class, 'show'])->name('actor-management.show');
+Route::get('actor-management-edit', [ActorManagementController::class, 'edit'])->name('actor-management.edit');
+
+// Create the resource (POST)
+Route::post('actor-management', [ActorManagementController::class, 'store'])->name('actor-management.store');
+
+// Update the resource (PUT)
+Route::put('actor-management', [ActorManagementController::class, 'update'])->name('actor-management.update');
+
+// Delete the resource (DELETE)
+Route::delete('actor-management/{id}', [ActorManagementController::class, 'destroy'])->name('actor-management.destroy');
+
 
 Route::get('/', function () {return redirect('/dashboard');})->middleware('auth');
 	Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
