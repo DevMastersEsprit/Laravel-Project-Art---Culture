@@ -1,6 +1,12 @@
 // General styles
 
-.table {
+    .custom-table {
+        border: 2px solid #FFA500; /* Couleur orange */
+    }
+
+
+.table {        border: 2px solid #FFA500; /* Couleur orange */
+
   thead th {
     padding: $table-head-spacer-y $table-head-spacer-x;
     text-transform: $table-head-text-transform;
@@ -16,7 +22,7 @@
     .progress {
       height: $table-progress-height;
       width: $table-progress-width;
-      margin: $table-progress-margin; 
+      margin: $table-progress-margin;
     }
   }
 

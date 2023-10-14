@@ -4,102 +4,93 @@ namespace App\Http\Controllers;
 
 use App\Models\Place;
 use Illuminate\Http\Request;
-
+use Illuminate\Http\PlaceRequest;
 class PlaceController extends Controller
 {
-    /**
-     * Affiche la liste des ressources.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $places = Place::all();
         return view('pages.place-management', compact('places'));
     }
 
-    /**
-     * Affiche le formulaire de création d'une nouvelle ressource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('pages.place.create');
     }
 
-    /**
-     * Stocke une nouvelle ressource dans la base de données.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $place = Place::create($request->all());
+         $request->validate([
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
+            'capacity' => 'nullable|integer',
+            'description' => 'nullable|string',
+            'category' => 'nullable|string',
+            'facilities' => 'nullable|array',
+            'accessibility' => 'nullable|string',
+            'internal_rules' => 'nullable|string',
+            'photos' => 'nullable|array',
+            'website' => 'nullable|url',
+            'phone_number' => 'nullable|regex:/^[0-9]{8}$/|numeric', // 10 chiffres
+            'email' => 'nullable|email',
+            'social_media_links' => 'nullable|array',
+        ]);
+$data=$request->all();
+        $place = Place::create($data);
         return redirect()->route('places.index');
     }
 
-    /**
-     * Affiche la ressource spécifiée.
-     *
-     * @param  Place  $place
-     * @return \Illuminate\Http\Response
-     */
     public function show(Place $place)
     {
         return view('pages.place.show', compact('place'));
     }
 
-    /**
-     * Affiche le formulaire d'édition de la ressource spécifiée.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
         $place = Place::findOrFail($id);
         return view('pages.place.edit', compact('place'));
     }
 
-    /**
-     * Met à jour la ressource spécifiée dans la base de données.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nom' => 'required|string|max:255',
-            'adresse' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'latitude' => 'nullable|numeric',
+            'longitude' => 'nullable|numeric',
+            'capacity' => 'nullable|integer',
+            'description' => 'nullable|string',
+            'category' => 'nullable|string',
+            'facilities' => 'nullable|array',
+            'accessibility' => 'nullable|string',
+            'internal_rules' => 'nullable|string',
+            'photos' => 'nullable|array',
+            'website' => 'nullable|url',
+            'phone_number' => 'nullable|regex:/^[0-9]{8}$/|numeric', // 10 chiffres
+            'email' => 'nullable|email',
+            'social_media_links' => 'nullable|array',
+            'rental_cost' => 'nullable|regex:/^\d+(\.\d{1,2})?$/', // Nombre avec 2 décimales au maximum
         ]);
+$data=$request->all();
 
         $place = Place::find($id);
 
         if (!$place) {
-            return redirect()->route('places.index')->with('error', 'Place non trouvée.');
+            return redirect()->route('places.index')->with('error', 'Lieu non trouvé.');
         }
 
-        $place->nom = $request->input('nom');
-        $place->adresse = $request->input('adresse');
-        $place->save();
+        $place->update($data);
 
-        return redirect()->route('places.index')->with('success', 'Place mise à jour avec succès.');
+        return redirect()->route('places.index')->with('success', 'Lieu mis à jour avec succès.');
     }
 
-    /**
-     * Supprime la ressource spécifiée de la base de données.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
         $place = Place::find($id);
         $place->delete();
-        return redirect()->route('places.index')->with('success', 'Place supprimée avec succès');
+        return redirect()->route('places.index')->with('success', 'Lieu supprimé avec succès.');
     }
 }
+
