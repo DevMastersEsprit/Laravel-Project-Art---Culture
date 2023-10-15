@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use \App\Models\Domain;
 
 class Actor extends Model
 {
@@ -15,7 +16,6 @@ class Actor extends Model
         'birthPlace',
         'biography',
         'nationality',
-        'specialties' ,
         'profilePicture',
         'email',
         'phoneNumber',
@@ -23,4 +23,10 @@ class Actor extends Model
         'discography',
         'availability',
     ];
+
+    public function domains()
+    {
+        return $this->belongsToMany(Domain::class);
+    }
+
 }

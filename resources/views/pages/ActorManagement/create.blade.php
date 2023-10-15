@@ -1,24 +1,45 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Create a new Actor'])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Create a new Artist'])
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12">
                 <div class="card mb-4 p-4">
-                    <h2>Add a new actor</h2>
+                    <h2>Add a new Artist</h2>
                     <form action="{{ route('actor-management.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
                             <label for="exampleInputEmail1">FullName</label>
                             <input name="fullName" type="text" class="form-control" placeholder="Enter fullName">
+                            @error('fullName')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="form-group">
+                            <label for="domains">Select Domain(s):</label>
+                            <div class="select is-multiple">
+                                <select name="domains[]" multiple class="form-control">
+                                    @foreach ($domains as $domain)
+                                        <option value="{{ $domain->id }}">
+                                            {{ $domain->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Email address</label>
                             <input name="email" type="email" class="form-control" placeholder="exemple@exemple.com">
+                            @error('email')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Birth Date</label>
                             <input name="birthDate" type="date" class="form-control" placeholder="Enter birthDate">
+                            @error('birthDate')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Birth Place</label>
@@ -33,13 +54,12 @@
                             <input name="nationality" type="text" class="form-control" placeholder="Enter nationality">
                         </div>
                         <div class="form-group">
-                            <label for="exampleInputPassword1">Specialities</label>
-                            <textarea name="specialties" type="text" class="form-control" placeholder="Enter specialties"></textarea>
-                        </div>
-                        <div class="form-group">
                             <label for="exampleInputPassword1">Profile Picture</label>
                             <input name="profilePicture" type="file" class="form-control"
                                 placeholder="Enter profilePicture">
+                            @error('profilePicture')
+                                <div class="alert alert-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Phone Number</label>
