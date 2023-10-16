@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Evenement extends Model
+class Article extends Model
 {
     use HasFactory;
-    public function articles(){
-        return $this->hasMany(Article::class);
+
+    public function evenement(){
+        return $this->belongsTo(Evenement::class);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActorManagementController;
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\EvenementController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -27,6 +28,8 @@ Route::get('/', function () {
 	return view('welcome');
 });
 Route::resource('/events', EvenementController::class);
+Route::resource('/articles', ArticleController::class);
+
 // Route::resource('actor-management', \App\Http\Controllers\ActorManagementController::class);
 
 // Get the resource (GET)
@@ -44,7 +47,8 @@ Route::put('actor-management', [ActorManagementController::class, 'update'])->na
 // Delete the resource (DELETE)
 Route::delete('actor-management/{id}', [ActorManagementController::class, 'destroy'])->name('actor-management.destroy');
 Route::get('/', function () {
-	return redirect('/dashboard'); })->middleware('auth');
+	return redirect('/dashboard');
+})->middleware('auth');
 Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register.perform');
 Route::get('/login', [LoginController::class, 'show'])->middleware('guest')->name('login');
