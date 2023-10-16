@@ -30,7 +30,6 @@
                         <input type="text" name="facilities" class="form-control" placeholder="Facilities">
                         <textarea name="internal_rules" class="form-control" placeholder="Internal Rules"></textarea>
                         <input type="text" name="phone_number" class="form-control" placeholder="Phone Number">
-                        <input type="email" name="email" class="form-control" placeholder="Email">
                     </div>
 
                     <!-- Ajout du bouton de soumission -->
@@ -65,7 +64,6 @@
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Facilities</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Internal Rules</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Phone Number</th>
-                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Create Date</th>
                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                                 </tr>
@@ -105,9 +103,7 @@
                                     <td class="align-middle text-center text-sm">
                                         <p class="text-sm font-weight-bold mb-0">{{ $place->phone_number }}</p>
                                     </td>
-                                    <td class="align-middle text-center text-sm">
-                                        <p class="text-sm font-weight-bold mb-0">{{ $place->email }}</p>
-                                    </td>
+
 
 
                                     <td class="align-middle text-center text-sm">
@@ -155,9 +151,7 @@
                                             <div class="form-group">
                                                 <input type="text" name="phone_number" class="form-control" placeholder="Phone Number" value="{{ $place->phone_number }}">
                                             </div>
-                                            <div class="form-group">
-                                                <input type="email" name="email" class="form-control" placeholder="Email" value="{{ $place->email }}">
-                                            </div>
+
 
                                             <button type="submit" class="btn btn-primary btn-sm">Save</button>
                                         </form>

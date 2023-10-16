@@ -28,7 +28,7 @@ return new class extends Migration
             $table->text('photos')->nullable();
             $table->string('website')->nullable();
             $table->string('phone_number')->nullable();
-            $table->string('email')->nullable();
+
             $table->text('social_media_links')->nullable();
             $table->text('comments_and_reviews')->nullable();
             $table->text('past_events')->nullable();

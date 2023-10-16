@@ -41,12 +41,11 @@
                         <label for="places_id">Place</label>
                         <select name="places_id" class="form-control" required>
                             <option value="">Select a place</option>
-                            @foreach ($areas as $area)
-                                @php
-                                    $place = App\Models\Place::find($area->places_id);
-                                @endphp
-                                <option value="{{ $place->id }}">{{ $place->name }}</option>
-                            @endforeach
+                            @foreach ($places as $place)
+
+                            <option value="{{ $place->id }}">{{ $place->name }}</option>
+                        @endforeach
+
                         </select>
                     </div>
 
@@ -181,15 +180,22 @@
                                                 <div class="form-group">
                                                     <label for="places_id">Place</label>
                                                     <select name="places_id" class="form-control" required>
-                                                        <option value="">Select a place</option>
                                                         @foreach ($areas as $area)
                                                             @php
                                                                 $place = App\Models\Place::find($area->places_id);
                                                             @endphp
                                                             <option value="{{ $place->id }}" @if ($place->id === $area->places_id) selected @endif>{{ $place->name }}</option>
                                                         @endforeach
+
+                                                        <!-- Afficher d'autres options si le lieu n'est pas associé à l'Area -->
+                                                        @foreach ($places as $place)
+                                                            @if (!$areas->contains('places_id', $place->id))
+                                                                <option value="{{ $place->id }}">{{ $place->name }}</option>
+                                                            @endif
+                                                        @endforeach
                                                     </select>
                                                 </div>
+
 
                                                 <div class="form-group">
                                                     <input type="text" name="postal_code" class="form-control" placeholder="Postal Code" value="{{ $area->postal_code }}">

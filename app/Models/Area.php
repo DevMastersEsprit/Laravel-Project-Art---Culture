@@ -23,6 +23,5 @@ class Area extends Model
 
     public function place()
     {
-        return $this->belongsTo(Place::class); // Relation indiquant à quel lieu la salle appartient
-    }
+        return $this->belongsTo(Place::class, 'places_id');    }
 }
