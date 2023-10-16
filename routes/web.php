@@ -11,6 +11,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\CommentaireController;
+use App\Http\Controllers\EmojiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,10 +58,13 @@ Route::get('/dashboard', [HomeController::class, 'index'])->name('home')->middle
 
 Route::group(['middleware' => 'auth'], function () {
 	// Route::get('/comment',[CommentaireController::class,'index']) ;
+	Route::resource('/emoji', EmojiController::class);
 	Route::resource('/comment', CommentaireController::class);
 	Route::put('/comment/like/{id}', [CommentaireController::class, 'like'])->name("like");
 	Route::put('/comment/dislike/{id}', [CommentaireController::class, 'dislike'])->name("dislike");
-
+	Route::post('/comment/addEmoji', [CommentaireController::class, 'addEmoji'])->name('addEmoji');
+	Route::post('/comment/remove-emoji', [CommentaireController::class, 'removeEmoji'])->name('comment.removeEmoji');
+	
 	Route::get('/virtual-reality', [PageController::class, 'vr'])->name('virtual-reality');
 	Route::get('/rtl', [PageController::class, 'rtl'])->name('rtl');
 	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');

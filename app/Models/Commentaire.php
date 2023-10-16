@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Commentaire extends Model
 {
     use HasFactory;
+
+    public function emojis()
+    {
+        return $this->belongsToMany(Emoji::class);
+    }
 }

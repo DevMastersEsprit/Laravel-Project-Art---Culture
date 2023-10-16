@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Commentaire;
+use App\Models\Emoji;
 use Illuminate\Http\Request;
 
 class CommentaireController extends Controller
@@ -14,8 +15,10 @@ class CommentaireController extends Controller
      */
     public function index()
     {
-        $commentaires = Commentaire::all();;
-        return view('Commentaire.index', compact('commentaires'));
+        $commentaires = Commentaire::with('emojis')->get();
+        $emojis = Emoji::all();
+
+        return view('Commentaire.index', compact('commentaires','emojis'));
     }
 
     /**
@@ -132,5 +135,30 @@ class CommentaireController extends Controller
         $commentaire->save();
         return redirect()->route('comment.index');
     
+    }
+    
+    public function addEmoji(Request $request)
+    {
+        
+        $commentId = $request->input('commentId');
+        $emojiEmj = $request->input('emojiEmj');
+        $commentaire = Commentaire::find($commentId) ;
+        
+        $emojis = Emoji::all();
+
+        foreach ($emojis as $emoji) {
+            if ($emoji->emj == $emojiEmj) {
+                $selectedEmojis = $emoji;
+            }
+        }
+        $commentaire->emojis()->attach($selectedEmojis);
+
+        return redirect()->route('comment.index');
+    }
+
+    public function removeEmoji(Request $request)
+    {
+        //$commentaire->emojis()->detach($emoji);
+        return redirect()->route('comment.index');
     }
 }
