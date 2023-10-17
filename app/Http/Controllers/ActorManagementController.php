@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use \App\Models\Actor;
+use \App\Models\Domain;
+use App\Http\Requests\ActorRequest;
 
 class ActorManagementController extends Controller
 {
@@ -14,7 +16,7 @@ class ActorManagementController extends Controller
      */
     public function index()
     {
-        $actors = Actor::all();
+        $actors = Actor::with('domains')->get();
         return view ('pages.ActorManagement.index', compact('actors')) ;
     }
 
@@ -25,7 +27,8 @@ class ActorManagementController extends Controller
      */
     public function create()
     {
-        return view('pages.ActorManagement.create');
+        $domains = Domain::all();
+        return view('pages.ActorManagement.create', compact('domains'));
     }
 
     /**
@@ -34,12 +37,8 @@ class ActorManagementController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ActorRequest $request)
     {
-        $request->validate([
-            'profilePicture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
         $imageName = time().'.'.$request->profilePicture->extension();
 
         $request->profilePicture->move(public_path('actorPictures'), $imageName);
@@ -60,6 +59,9 @@ class ActorManagementController extends Controller
         ]);
 
         $actor->save();
+
+        $actor->domains()->attach($request->input('domains'));
+
         return redirect()->route('actor-management.index')->with('success', 'Actor is added successfully !');
     }
 
@@ -69,9 +71,15 @@ class ActorManagementController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        //
+        $id = $request->query('id');
+        $actor = Actor::with('domains')->find($id);
+
+        if (!$actor) {
+            return redirect()->route('actor-management.index')->with('error', 'Actor not found !');
+        }
+        return view('pages.ActorManagement.actor', compact('actor'));
     }
 
     /**
@@ -83,8 +91,10 @@ class ActorManagementController extends Controller
     public function edit(Request $request)
     {
         $id = $request->query('id');
-        $actor = Actor::find($id);
-        return view('pages.ActorManagement.edit', compact('actor'));
+        $actor = Actor::with('domains')->find($id);
+        $domains = Domain::all();
+
+        return view('pages.ActorManagement.edit', compact('actor'), compact('domains'));
     }
 
     /**
@@ -99,81 +109,38 @@ class ActorManagementController extends Controller
         $id = $request->query('id');
         if ($id) {
             $actor = Actor::find($id);
+
             $request->validate([
-                'fullName' => 'required',
+                'fullName' => 'required|max:30',
                 'email' => 'required',
-                'phoneNumber' => 'required',
-                // 'profilePicture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'phoneNumber' => 'required|numeric',
+                'profilePicture' => 'required',
+                'birthDate' => 'required|date|before:today',
+            ], [
+                'birthDate.required' => "BirthDate is required !"
             ]);
 
-            if ($request->profilePicture) {
-
-                if (is_string($request->profilePicture)) {
-                    $fileHandle = fopen($request->profilePicture, 'w');
-                    fwrite($fileHandle, $request->profilePicture);
-                    fclose($fileHandle);
-
-                    $imageName = time().'.'.$fileHandle->extension();
-
-                    $fileHandle->move(public_path('actorPictures'), $imageName);
-                    
-                    $actor->fullName = $request->fullName;
-                    $actor->birthDate = $request->birthDate;
-                    $actor->birthPlace = $request->birthPlace;
-                    $actor->biography = $request->biography;
-                    $actor->nationality = $request->nationality;
-                    $actor->specialties = $request->specialties;
-                    $actor->profilePicture = $imageName;
-                    $actor->email = $request->email;
-                    $actor->phoneNumber = $request->phoneNumber;
-                    $actor->socialConnections = $request->socialConnections;
-                    $actor->discography = $request->discography;
-                    $actor->availability = $request->availability;
-                    $actor->save();
-
-                    return redirect()->route('actor-management.index')->with('success', 'Actor is updated successfully !');
-                } else {
-                    $imageName = time().'.'.$request->profilePicture->extension();
-
-                    $request->profilePicture->move(public_path('actorPictures'), $imageName);
-                    
-                    $actor->fullName = $request->fullName;
-                    $actor->birthDate = $request->birthDate;
-                    $actor->birthPlace = $request->birthPlace;
-                    $actor->biography = $request->biography;
-                    $actor->nationality = $request->nationality;
-                    $actor->specialties = $request->specialties;
-                    $actor->profilePicture = $imageName;
-                    $actor->email = $request->email;
-                    $actor->phoneNumber = $request->phoneNumber;
-                    $actor->socialConnections = $request->socialConnections;
-                    $actor->discography = $request->discography;
-                    $actor->availability = $request->availability;
-                    $actor->save();
-
-                    return redirect()->route('actor-management.index')->with('success', 'Actor is updated successfully !');
-                }
-                
-                
-
-                
-            } else {
-                $actor->fullName = $request->fullName;
-                $actor->birthDate = $request->birthDate;
-                $actor->birthPlace = $request->birthPlace;
-                $actor->biography = $request->biography;
-                $actor->nationality = $request->nationality;
-                $actor->specialties = $request->specialties;
-                $actor->profilePicture = $request->profilePicture;
-                $actor->email = $request->email;
-                $actor->phoneNumber = $request->phoneNumber;
-                $actor->socialConnections = $request->socialConnections;
-                $actor->discography = $request->discography;
-                $actor->availability = $request->availability;
-                $actor->save();
-
-                return redirect()->route('actor-management.index')->with('success', 'Actor is updated successfully !');
+            if (!is_string($request->profilePicture)) {
+                $imageName = time().'.'.$request->profilePicture->extension();
+                $request->profilePicture->move(public_path('actorPictures'), $imageName);
+                $actor->profilePicture = $imageName;
             }
+            
+            $actor->fullName = $request->fullName;
+            $actor->birthDate = $request->birthDate;
+            $actor->birthPlace = $request->birthPlace;
+            $actor->biography = $request->biography;
+            $actor->nationality = $request->nationality;
+            $actor->email = $request->email;
+            $actor->phoneNumber = $request->phoneNumber;
+            $actor->socialConnections = $request->socialConnections;
+            $actor->discography = $request->discography;
+            $actor->availability = $request->availability;
+            $actor->save();
+
+            $actor->domains()->sync($request->input('domains'));
+
+            return redirect()->route('actor-management.index')->with('success', 'Actor is updated successfully !');
             
         } else {
             return redirect()->route('actor-management.index')->with('error', 'Actor not found !');

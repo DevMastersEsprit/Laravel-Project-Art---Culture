@@ -22,7 +22,7 @@ class ActorFactory extends Factory
             'birthPlace' => fake()->city,
             'biography' => fake()->text,
             'nationality' => fake()->country,
-            'specialties' => fake()->word,
+            // 'specialties' => fake()->word,
             'profilePicture' => fake()->imageUrl(200, 200),
             'email' => fake()->unique()->safeEmail,
             'phoneNumber' => fake()->e164PhoneNumber(),

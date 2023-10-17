@@ -13,6 +13,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\CommentaireController;
+use App\Http\Controllers\DomainController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +40,7 @@ Route::resource('/articles', ArticleController::class);
 // Get the resource (GET)
 Route::get('actor-management', [ActorManagementController::class, 'index'])->name('actor-management.index');
 Route::get('actor-management-create', [ActorManagementController::class, 'create'])->name('actor-management.create');
-// Route::get('actor-management/{id}', [ActorManagementController::class, 'show'])->name('actor-management.show');
+Route::get('actor', [ActorManagementController::class, 'show'])->name('actor.show');
 Route::get('actor-management-edit', [ActorManagementController::class, 'edit'])->name('actor-management.edit');
 
 // Create the resource (POST)
@@ -52,6 +53,10 @@ Route::put('actor-management', [ActorManagementController::class, 'update'])->na
 Route::delete('actor-management/{id}', [ActorManagementController::class, 'destroy'])->name('actor-management.destroy');
 Route::resource('places', \App\Http\Controllers\PlaceController::class);
 Route::put('/places/{id}', [\App\Http\Controllers\PlaceController::class, 'update'])->name('places.update');
+
+//Domain route 
+Route::resource('/domain-management', DomainController::class);
+
 Route::get('/', function () {
 	return redirect('/dashboard');
 })->middleware('auth');

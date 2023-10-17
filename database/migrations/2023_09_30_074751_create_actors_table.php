@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('birthPlace', 255)->nullable();
             $table->text('biography')->nullable();
             $table->string('nationality', 255)->nullable(); 
-            $table->string('specialties', 255)->nullable();
+            // $table->string('specialties', 255)->nullable();
             $table->string('profilePicture', 255)->nullable();
             $table->string('email', 255)->nullable();
             $table->string('phoneNumber', 255)->nullable();

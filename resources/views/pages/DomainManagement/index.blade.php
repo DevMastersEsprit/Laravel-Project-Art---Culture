@@ -8,11 +8,11 @@
 </head>
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Artist Management'])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Domain Management'])
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-12">
-                <div class="card mb-4">
+                <div class="card mb-4 m-5 p-4">
                     @if (session('success'))
                         <div class="mt-4 alert alert-success notification is-success" id="success-message" role="alert"
                             style="width: 40%; display:flex; justify-content: center; margin-left: 30%;">
@@ -26,9 +26,9 @@
                         </div>
                     @endif
                     <div class="card-header pb-0">
-                        <a class="btn" style="color: #fb6340;" href="{{ route('actor-management.create') }}">Add New
-                            Artist</a>
-                        <h6>List of Artists</h6>
+                        <a class="btn" style="color: #fb6340;" href="{{ route('domain-management.create') }}">Add New
+                            Domain</a>
+                        <h6>List of Domains</h6>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="table-responsive p-0">
@@ -36,95 +36,31 @@
                                 <thead>
                                     <tr>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            FullName / Email</th>
+                                            Name</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            BirthDate / BirthPlace</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Biography</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Nationality</th>
-                                        <th
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Domains</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            PhoneNumber</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            SocialConnections</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Discography</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Availability</th>
+                                            Description</th>
                                         <th class="text-secondary opacity-7">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($actors as $actor)
+                                    @foreach ($domains as $domain)
                                         <tr>
                                             <td>
-                                                <div class="d-flex px-2 py-1">
-                                                    <div>
-                                                        <img src="/actorPictures/{{ $actor->profilePicture }}"
-                                                            class="avatar avatar-sm me-3" alt="user1">
-                                                    </div>
-                                                    <div class="d-flex flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">{{ $actor->fullName }}</h6>
-                                                        <p class="text-xs text-secondary mb-0">{{ $actor->email }}</p>
-                                                    </div>
-                                                </div>
+                                                <p class="font-weight-bold mb-0">{{ $domain->name }}</p>
                                             </td>
                                             <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $actor->birthDate }}</p>
-                                                <p class="text-xs text-secondary mb-0">{{ $actor->birthPlace }}</p>
-                                            </td>
-                                            <td class="tdStyle" style="width: 400px; white-space: normal;">
-                                                <p class="text-xs font-weight-bold mb-0">{{ $actor->biography }}</p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $actor->nationality }}</p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">
-                                                <ul>
-                                                    @foreach ($actor->domains as $domain)
-                                                        <li>{{ $domain->name }}</li>
-                                                    @endforeach
-                                                </ul>
-                                                </p>
-                                            </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold mb-0">{{ $actor->phoneNumber }}</p>
-                                            </td>
-                                            <td class="tdStyle" style="width: 400px; white-space: normal;">
-                                                <p class="text-xs font-weight-bold mb-0">{{ $actor->socialConnections }}
-                                                </p>
-                                            </td>
-                                            <td class="tdStyle" style="width: 400px; white-space: normal;">
-                                                <p class="text-xs font-weight-bold mb-0">{{ $actor->discography }}</p>
-                                            </td>
-                                            <td class="align-middle text-center text-sm">
-                                                <span
-                                                    class="badge badge-sm bg-gradient-success">{{ $actor->availability }}</span>
+                                                <p class="text-xs font-weight-bold mb-0">{{ $domain->description }}</p>
                                             </td>
                                             <td class="align-middle">
                                                 <a class="btn btn-warning"
-                                                    href="{{ route('actor-management.edit') }}?id={{ $actor->id }}">Edit
+                                                    href="{{ route('domain-management.edit', $domain->id) }}">Edit
                                                     <i class="fas fa-pencil-alt me-2" aria-hidden="true"></i></a>
-                                                {{-- <form action="{{ route('actor-management.destroy', $actor->id) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    @method('DELETE') --}}
                                                 <button class="btn btn-danger delete-object">Delete
                                                     <i class="far fa-trash-alt me-2"></i>
                                                 </button>
-                                                {{-- </form> --}}
                                                 <a class="btn btn-success"
-                                                    href="{{ route('actor.show') }}?id={{ $actor->id }}">More info</a>
+                                                    href="{{ route('domain-management.show', $domain->id) }}">More info</a>
                                             </td>
                                             <!-- Delete Confirmation Modal -->
                                             <div class="modal fade" id="deleteConfirmationModal" tabindex="-1"
@@ -136,13 +72,13 @@
                                                             </h5>
                                                         </div>
                                                         <div class="modal-body">
-                                                            Are you sure you want to delete this Artist?
+                                                            Are you sure you want to delete this Domain?
                                                         </div>
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-secondary"
                                                                 data-dismiss="modal">Cancel</button>
                                                             <form
-                                                                action="{{ route('actor-management.destroy', $actor->id) }}"
+                                                                action="{{ route('domain-management.destroy', $domain->id) }}"
                                                                 method="POST">
                                                                 @csrf
                                                                 @method('DELETE')
@@ -161,8 +97,40 @@
                         </div>
                     </div>
                 </div>
+                <div class="card mb-4 m-5 p-4">
+                    <div class="card-body px-0 pt-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table align-items-center mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            Domain Name</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Artists FullName</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($actorsByDomain as $domain)
+                                        <tr>
+                                            <td>
+                                                <p class="font-weight-bold mb-0">{{ $domain->name }}</p>
+                                            </td>
+                                            @foreach ($domain->actors as $actor)
+                                                <td class="align-middle">
+                                                    {{ $actor->fullName }}
+                                                </td>
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
     </div>
     <div id="alert">
         @include('components.alert')
