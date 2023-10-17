@@ -15,4 +15,8 @@ class Payment extends Model
         'status',
         'payment_date',
     ];
+    public function tickets()
+{
+    return $this->hasMany(Ticket::class);
+}
 }

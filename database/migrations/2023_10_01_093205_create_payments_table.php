@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('transaction_id');
             $table->string('status', 20);
             $table->timestamp('payment_date');
+           
             $table->timestamps();
         });
     }

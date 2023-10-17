@@ -50,7 +50,7 @@ public function create()
             "stock" => $request->get('stock'),
         ]);*/
 
-
+            
         return redirect()->route('payments.index');
     }
    /**

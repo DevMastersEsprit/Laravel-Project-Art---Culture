@@ -173,6 +173,7 @@
     <div class="alert alert-light d-flex justify-content-between align-items-center" role="alert">
     <span>This feature is available in <strong>Argon Dashboard 2 Pro Laravel</strong>. Check it <strong><a href="https://www.creative-tim.com/product/argon-dashboard-pro-laravel" target="_blank">here</a></strong></span>
     <a class="btn btn-primary btn-sm"  target="_blank" type="button" href="{{ route('payments.create') }}">Add a payment</a>
+    <a class="btn btn-primary btn-sm"  target="_blank" type="button" href="{{ route('payments.create') }}">view your tickets</a>
 </div>
 
     <div class="card mb-4">

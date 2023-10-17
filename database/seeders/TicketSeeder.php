@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class PaymentSeeder extends Seeder
+class TicketSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,7 +14,7 @@ class PaymentSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Payment::factory(5)->create();
+        \App\Models\Ticket::factory(5)->create();
 
     }
 }

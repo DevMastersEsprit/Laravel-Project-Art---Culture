@@ -45,7 +45,7 @@
 
                     <div class="field">
                         <div class="control">
-                            <button class="btn btn-primary" type="submit">Pay</button>
+                            <a class="btn btn-primary" href="{{ route('checkout') }}" type="submit">Pay</a>
                         </div>
                     </div>
                 </div>
