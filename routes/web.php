@@ -27,6 +27,9 @@ use App\Http\Controllers\CommentaireController;
 Route::get('/', function () {
 	return view('welcome');
 });
+Route::get('/profile-test', function () {
+	return view('account-pages/profile');
+});
 Route::resource('/events', EvenementController::class);
 Route::resource('/articles', ArticleController::class);
 
