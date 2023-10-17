@@ -17,6 +17,7 @@ use App\Http\Controllers\CommentaireController;
 use App\Http\Controllers\DomainController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\EmojiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,7 +80,13 @@ Route::post('/change-password', [ChangePassword::class, 'update'])->middleware('
 Route::get('/dashboard', [HomeController::class, 'index'])->name('home')->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
+    // Route::get('/comment',[CommentaireController::class,'index']) ;
+    Route::resource('/emoji', EmojiController::class);
     Route::resource('/comment', CommentaireController::class);
+    Route::put('/comment/like/{id}', [CommentaireController::class, 'like'])->name("like");
+    Route::put('/comment/dislike/{id}', [CommentaireController::class, 'dislike'])->name("dislike");
+    Route::post('/comment/addEmoji', [CommentaireController::class, 'addEmoji'])->name('addEmoji');
+    Route::post('/comment/remove-emoji', [CommentaireController::class, 'removeEmoji'])->name('comment.removeEmoji');
     Route::put('/comment/like/{id}', [CommentaireController::class, 'like'])->name("like");
     Route::put('/comment/dislike/{id}', [CommentaireController::class, 'dislike'])->name("dislike");
 

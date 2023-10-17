@@ -13,15 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('commentaires', function (Blueprint $table) {
+        Schema::create('emojis', function (Blueprint $table) {
             $table->id();
-            $table->string('Content');
-            $table->integer('Likes');
-            $table->integer('Dislikes');
-            $table->string('ReplyTo');
+            $table->text('emj')->collation('utf8mb4_unicode_ci');
             $table->timestamps();
-            //ReportedCount User idOfEntityReplyTo
+            
+            $table->charset = 'utf8mb4';
+            $table->collation = 'utf8mb4_unicode_ci';
         });
+        
     }
 
     /**
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('commentaires');
+        Schema::dropIfExists('emojis');
     }
 };

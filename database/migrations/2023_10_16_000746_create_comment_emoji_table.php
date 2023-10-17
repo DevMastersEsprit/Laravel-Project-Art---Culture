@@ -13,14 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('commentaires', function (Blueprint $table) {
+        Schema::create('commentaire_emoji', function (Blueprint $table) {
             $table->id();
-            $table->string('Content');
-            $table->integer('Likes');
-            $table->integer('Dislikes');
-            $table->string('ReplyTo');
+            $table->unsignedBigInteger('commentaire_id');
+            $table->unsignedBigInteger('emoji_id');
             $table->timestamps();
-            //ReportedCount User idOfEntityReplyTo
+
+            $table->foreign('commentaire_id')->references('id')->on('commentaires')->onDelete('cascade');
+            $table->foreign('emoji_id')->references('id')->on('emojis')->onDelete('cascade');
         });
     }
 
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('commentaires');
+        Schema::dropIfExists('comment_emoji');
     }
 };
