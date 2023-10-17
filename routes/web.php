@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ActorManagementController;
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\EvenementController;
 use App\Http\Controllers\PlaceController;
 use Illuminate\Support\Facades\Route;
@@ -27,7 +28,12 @@ use App\Http\Controllers\CommentaireController;
 Route::get('/', function () {
 	return view('welcome');
 });
+Route::get('/profile-test', function () {
+	return view('account-pages/profile');
+});
 Route::resource('/events', EvenementController::class);
+Route::resource('/articles', ArticleController::class);
+
 // Route::resource('actor-management', \App\Http\Controllers\ActorManagementController::class);
 
 // Get the resource (GET)
@@ -47,7 +53,8 @@ Route::delete('actor-management/{id}', [ActorManagementController::class, 'destr
 Route::resource('places', \App\Http\Controllers\PlaceController::class);
 Route::put('/places/{id}', [\App\Http\Controllers\PlaceController::class, 'update'])->name('places.update');
 Route::get('/', function () {
-	return redirect('/dashboard'); })->middleware('auth');
+	return redirect('/dashboard');
+})->middleware('auth');
 Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register.perform');
 Route::get('/login', [LoginController::class, 'show'])->middleware('guest')->name('login');
