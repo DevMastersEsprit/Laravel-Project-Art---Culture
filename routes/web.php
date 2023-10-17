@@ -31,7 +31,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/profile-test', function () {
-	return view('account-pages/profile');
+    return view('account-pages/profile');
 });
 Route::resource('/events', EvenementController::class);
 Route::resource('/articles', ArticleController::class);
@@ -52,8 +52,9 @@ Route::put('actor-management', [ActorManagementController::class, 'update'])->na
 
 // Delete the resource (DELETE)
 Route::delete('actor-management/{id}', [ActorManagementController::class, 'destroy'])->name('actor-management.destroy');
-Route::resource('places', \App\Http\Controllers\PlaceController::class);
-Route::put('/places/{id}', [\App\Http\Controllers\PlaceController::class, 'update'])->name('places.update');
+Route::resource('places', PlaceController::class);
+Route::put('/places/{id}', [PlaceController::class, 'update'])->name('places.update');
+
 Route::resource('areas', AreaController::class);
 
 Route::delete('/areas/{id}', [AreaController::class, 'destroy'])->name('areas.destroy');
@@ -62,7 +63,7 @@ Route::delete('/areas/{id}', [AreaController::class, 'destroy'])->name('areas.de
 Route::resource('/domain-management', DomainController::class);
 
 Route::get('/', function () {
-	return redirect('/dashboard');
+    return redirect('/dashboard');
 })->middleware('auth');
 Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
 Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register.perform');
