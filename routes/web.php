@@ -15,6 +15,8 @@ use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\CommentaireController;
 use App\Http\Controllers\DomainController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\TicketController;
 
 /*
 |--------------------------------------------------------------------------
@@ -100,3 +102,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });
+
+Route::resource('payments', PaymentController::class);
+Route::resource('tickets', TicketController::class);
+Route::get('/checkout', 'App\Http\Controllers\StripeController@checkout')->name('checkout');
+Route::post('/session', 'App\Http\Controllers\StripeController@session')->name('session');
+Route::get('/success', 'App\Http\Controllers\StripeController@success')->name('success');
