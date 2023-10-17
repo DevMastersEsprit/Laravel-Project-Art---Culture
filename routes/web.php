@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\ActorManagementController;
 use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\EvenementController;
@@ -27,7 +28,7 @@ use App\Http\Controllers\DomainController;
 */
 
 Route::get('/', function () {
-	return view('welcome');
+    return view('welcome');
 });
 Route::get('/profile-test', function () {
 	return view('account-pages/profile');
@@ -53,6 +54,9 @@ Route::put('actor-management', [ActorManagementController::class, 'update'])->na
 Route::delete('actor-management/{id}', [ActorManagementController::class, 'destroy'])->name('actor-management.destroy');
 Route::resource('places', \App\Http\Controllers\PlaceController::class);
 Route::put('/places/{id}', [\App\Http\Controllers\PlaceController::class, 'update'])->name('places.update');
+Route::resource('areas', AreaController::class);
+
+Route::delete('/areas/{id}', [AreaController::class, 'destroy'])->name('areas.destroy');
 
 //Domain route 
 Route::resource('/domain-management', DomainController::class);
@@ -68,25 +72,30 @@ Route::get('/reset-password', [ResetPassword::class, 'show'])->middleware('guest
 Route::post('/reset-password', [ResetPassword::class, 'send'])->middleware('guest')->name('reset.perform');
 Route::get('/change-password', [ChangePassword::class, 'show'])->middleware('guest')->name('change-password');
 Route::post('/change-password', [ChangePassword::class, 'update'])->middleware('guest')->name('change.perform');
+
 Route::get('/dashboard', [HomeController::class, 'index'])->name('home')->middleware('auth');
 
 Route::group(['middleware' => 'auth'], function () {
-	// Route::get('/comment',[CommentaireController::class,'index']) ;
-	Route::resource('/comment', CommentaireController::class);
-	Route::put('/comment/like/{id}', [CommentaireController::class, 'like'])->name("like");
-	Route::put('/comment/dislike/{id}', [CommentaireController::class, 'dislike'])->name("dislike");
+    Route::resource('/comment', CommentaireController::class);
+    Route::put('/comment/like/{id}', [CommentaireController::class, 'like'])->name("like");
+    Route::put('/comment/dislike/{id}', [CommentaireController::class, 'dislike'])->name("dislike");
 
-	Route::get('/virtual-reality', [PageController::class, 'vr'])->name('virtual-reality');
-	Route::get('/rtl', [PageController::class, 'rtl'])->name('rtl');
-	Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
-	Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
-	Route::get('/profile-static', [PageController::class, 'profile'])->name('profile-static');
-	Route::get('/sign-in-static', [PageController::class, 'signin'])->name('sign-in-static');
-	Route::get('/sign-up-static', [PageController::class, 'signup'])->name('sign-up-static');
-    Route::get('/{page}', [PlaceController::class, 'index'])->name('page');
-    Route::delete('/places/{id}', [PlaceController::class, 'index'])->name('places.destroy');
+    Route::get('/virtual-reality', [PageController::class, 'vr'])->name('virtual-reality');
+    Route::get('/rtl', [PageController::class, 'rtl'])->name('rtl');
+    Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
+    Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
+    Route::get('/profile-static', [PageController::class, 'profile'])->name('profile-static');
+    Route::get('/sign-in-static', [PageController::class, 'signin'])->name('sign-in-static');
+    Route::get('/sign-up-static', [PageController::class, 'signup'])->name('sign-up-static');
 
-	Route::post('logout', [LoginController::class, 'logout'])->name('logout');
-   // Route::get('/places', PlaceController::class);
+    // Area Routes
 
+
+    Route::resource('places', PlaceController::class);
+    Route::get('/{page}', [PageController::class, 'index'])->name('page');
+
+    Route::delete('/places/{id}', [PlaceController::class, 'destroy'])->name('places.destroy');
+    Route::delete('/areas/{id}', [AreaController::class, 'destroy'])->name('areas.destroy');
+
+    Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });
