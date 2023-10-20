@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Rules\EmojiValidationRule;
+
 use App\Models\Emoji;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+
 
 
 class EmojiController extends Controller
@@ -16,7 +20,12 @@ class EmojiController extends Controller
     public function index()
     {
         $emojis = Emoji::all();
-        return view('Emoji.index', compact('emojis'));
+        // $response = Http::get('https://emojipedia.org/emojis/');
+        // $emojisapi = $response->body();
+
+        return view('Emoji.index', compact('emojis'
+        // ,'emojisapi'
+    ));
     
     }
 
@@ -43,9 +52,7 @@ class EmojiController extends Controller
         $exists = false;
 
         $request->validate([
-            'emj' => ['required','string','valid_emoji','min:1','max:5']
-            //,'regex:/^[^!@#$%^&*()_+={}\[\]|\\:;<>,".\/`~-]+$/'
-            
+            'emj' => ['required', new EmojiValidationRule]
         ]);
 
         foreach ($emojis as $emoji) {
