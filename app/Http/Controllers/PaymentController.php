@@ -38,21 +38,39 @@ public function create()
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    // public function store(Request $request)
+    // {
 
-        $payments = Payment::create($request->all());
+    //     $payments = Payment::create($request->all());
 
-        /*$product = new Product([
-            "name" => $request->get('name'),
-            "description" => $request->get('description'),
-            "price" => $request->get('price'),
-            "stock" => $request->get('stock'),
-        ]);*/
+    //     /*$product = new Product([
+    //         "name" => $request->get('name'),
+    //         "description" => $request->get('description'),
+    //         "price" => $request->get('price'),
+    //         "stock" => $request->get('stock'),
+    //     ]);*/
 
             
-        return redirect()->route('payments.index');
-    }
+    //     return redirect()->route('payments.index');
+    // }
+    public function store(Request $request)
+{
+    $request->validate([
+        'amount' => 'required',
+        'name' => 'required',
+        'age' => 'required',
+        'payment_method' => 'required',
+    ]);
+
+
+    $payment = Payment::create(
+        $request->all());
+        $payment->save();
+
+  
+
+    return redirect()->route('payments.index');
+}
    /**
      * Show the form for editing the specified resource.
      *

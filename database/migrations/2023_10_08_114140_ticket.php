@@ -16,11 +16,12 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('ref_ticket');
-            $table->text('description');
-            $table->decimal('amount', 10, 2);
-            $table->DateTime('start_event_date');
-            $table->DateTime('end_event_date');
+            $table->text('description'); 
+            $table->string('type', 50);
+            $table->decimal('amount', 10, 2); 
             $table->unsignedBigInteger('payments_id');
+            $table->integer('nbre_tickets'); 
+            
             $table->foreign('payments_id')
                 ->references('id')
                 ->on('payments')

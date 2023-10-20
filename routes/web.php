@@ -39,6 +39,11 @@ Route::get('/profile-test', function () {
 Route::resource('/events', EvenementController::class);
 Route::resource('/articles', ArticleController::class);
 Route::get('/articles/{eventId}', [ArticleController::class,'create']);
+Route::resource('/payments', PaymentController::class);
+
+Route::get('/checkout', 'App\Http\Controllers\StripeController@checkout')->name('checkout');
+Route::post('/session', 'App\Http\Controllers\StripeController@session')->name('session');
+Route::get('/success', 'App\Http\Controllers\StripeController@success')->name('success');
 
 // Route::resource('actor-management', \App\Http\Controllers\ActorManagementController::class);
 
@@ -111,8 +116,4 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });
 
-Route::resource('payments', PaymentController::class);
 Route::resource('tickets', TicketController::class);
-Route::get('/checkout', 'App\Http\Controllers\StripeController@checkout')->name('checkout');
-Route::post('/session', 'App\Http\Controllers\StripeController@session')->name('session');
-Route::get('/success', 'App\Http\Controllers\StripeController@success')->name('success');
