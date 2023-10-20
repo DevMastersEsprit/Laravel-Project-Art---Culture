@@ -18,6 +18,7 @@ use App\Http\Controllers\DomainController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\EmojiController;
+use App\Http\Controllers\ArtistInformation;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,8 @@ Route::delete('/areas/{id}', [AreaController::class, 'destroy'])->name('areas.de
 
 //Domain route 
 Route::resource('/domain-management', DomainController::class);
+
+Route::get('/artists', [ArtistInformation::class, 'index']);
 
 Route::get('/', function () {
     return redirect('/dashboard');
