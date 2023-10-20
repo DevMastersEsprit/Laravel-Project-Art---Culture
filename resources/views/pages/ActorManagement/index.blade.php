@@ -115,14 +115,9 @@
                                                 <a class="btn btn-warning"
                                                     href="{{ route('actor-management.edit') }}?id={{ $actor->id }}">Edit
                                                     <i class="fas fa-pencil-alt me-2" aria-hidden="true"></i></a>
-                                                {{-- <form action="{{ route('actor-management.destroy', $actor->id) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    @method('DELETE') --}}
                                                 <button class="btn btn-danger delete-object">Delete
                                                     <i class="far fa-trash-alt me-2"></i>
                                                 </button>
-                                                {{-- </form> --}}
                                                 <a class="btn btn-success"
                                                     href="{{ route('actor.show') }}?id={{ $actor->id }}">More info</a>
                                             </td>
