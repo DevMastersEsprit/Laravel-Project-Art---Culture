@@ -18,6 +18,11 @@ return new class extends Migration {
             $table->dateTime('date_debut');
             $table->dateTime('date_fin');
             $table->string('description');
+
+            $table->unsignedBigInteger('places_id')->nullable();
+            $table->foreign('places_id')->references('id')->on('places')->onDelete('cascade')->onUpdate('cascade');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

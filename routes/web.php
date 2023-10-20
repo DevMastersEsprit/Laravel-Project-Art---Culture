@@ -38,6 +38,7 @@ Route::get('/profile-test', function () {
 });
 Route::resource('/events', EvenementController::class);
 Route::resource('/articles', ArticleController::class);
+Route::get('/articles/{eventId}', [ArticleController::class,'create']);
 
 // Route::resource('actor-management', \App\Http\Controllers\ActorManagementController::class);
 

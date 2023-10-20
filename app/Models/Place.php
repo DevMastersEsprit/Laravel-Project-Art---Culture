@@ -39,4 +39,9 @@ class Place extends Model
     {
         return $this->hasMany(Area::class); // Relation "hasMany" pour récupérer les salles liées au lieu
     }
+
+    public function evenements()
+    {
+        return $this->hasMany(Evenement::class); // Relation "hasMany" pour récupérer les salles liées au lieu
+    }
 }

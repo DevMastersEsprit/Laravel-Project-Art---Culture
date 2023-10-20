@@ -13,4 +13,13 @@ class Commentaire extends Model
     {
         return $this->belongsToMany(Emoji::class);
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function evenement()
+    {
+        return $this->belongsTo(Evenement::class);
+    }
 }

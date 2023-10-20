@@ -20,8 +20,16 @@ class Ticket extends Model
 
     ];
     // Dans le modèle Ticket.php
-public function payment()
-{
-    return $this->belongsTo(Payment::class);
-}
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class);
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+    public function evenement()
+    {
+        return $this->belongsTo(Evenement::class);
+    }
 }
