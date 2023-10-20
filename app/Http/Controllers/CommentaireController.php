@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Commentaire;
 use App\Models\Emoji;
 use Illuminate\Http\Request;
+use Mockery\Undefined;
 
 class CommentaireController extends Controller
 {
@@ -77,7 +78,19 @@ class CommentaireController extends Controller
     public function edit($id)
     {
         $commentaire = Commentaire::find($id);
-        return view('commentaire.edit',compact('commentaire'));
+        $emojis = $commentaire->emojis;
+        
+        // foreach ($commentaires as $c) {
+        //     if($c->id == $commentaire->id){
+        //         foreach ($c->emojis as $emoji) {  
+        //             $c->emojis()->detach($emoji);
+        //         }
+        //     }
+            
+        // }
+        // ::with('emojis')->get();
+        // dd($commentaire);
+        return view('commentaire.edit',compact('commentaire','emojis'));
     }
 
     /**
@@ -94,11 +107,16 @@ class CommentaireController extends Controller
         ]);
 
         $commentaire = Commentaire::find($id);
+        
+        // $commentaires = Commentaire::with('emojis')->get();
+        
 
         $commentaire->Content = $request->Content;
         $commentaire->Likes = 0;
         $commentaire->Dislikes = 0;
         $commentaire->ReplyTo = "Noting";
+        $commentaire->emojis()->detach();
+
         $commentaire->save();
 
 
@@ -125,7 +143,7 @@ class CommentaireController extends Controller
         $commentaire = Commentaire::find($id) ;
         $commentaire->Likes = $commentaire->Likes+1; 
         $commentaire->save();
-        return redirect()->route('comment.index');
+        redirect()->route('comment.index');
     
     }
     public function dislike($id)
@@ -142,18 +160,23 @@ class CommentaireController extends Controller
         
         $commentId = $request->input('commentId');
         $emojiEmj = $request->input('emojiEmj');
-        $commentaire = Commentaire::find($commentId) ;
+        if($emojiEmj == null){
+            return redirect()->route('comment.index')
+            ->with('errorEmj','Choose Emj') ;
+        }else{
+            $commentaire = Commentaire::find($commentId) ;
         
-        $emojis = Emoji::all();
-
-        foreach ($emojis as $emoji) {
-            if ($emoji->emj == $emojiEmj) {
-                $selectedEmojis = $emoji;
+            $emojis = Emoji::all();
+            foreach ($emojis as $emoji) {
+                if ($emoji->emj == $emojiEmj) {
+                    $selectedEmojis = $emoji;
+                }
             }
+            $commentaire->emojis()->attach($selectedEmojis);
+    
+            return redirect()->route('comment.index');
         }
-        $commentaire->emojis()->attach($selectedEmojis);
-
-        return redirect()->route('comment.index');
+        
     }
 
     public function removeEmoji(Request $request)
