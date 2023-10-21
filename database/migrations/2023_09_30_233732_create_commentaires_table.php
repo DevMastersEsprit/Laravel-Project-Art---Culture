@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('Dislikes');
             $table->string('ReplyTo');
             $table->timestamps();
+            $table->unsignedBigInteger('parent_comment_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('evenement_id')->nullable();

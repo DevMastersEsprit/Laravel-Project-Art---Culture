@@ -76,9 +76,6 @@
                                         {{ session('errorEmj') }}
                                     </div>
                                     @endif
-                                    <!-- @error('errorEmj')
-                                    <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
-                                    @enderror -->
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -180,7 +177,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-10">
+                                        <div class="col-11">
                                             <div class="d-flex flex-row-reverse">
                                                 <form method="POST" action="{{ route('like', $comment->id) }}">
                                                     @csrf
@@ -205,13 +202,10 @@
                                                 </form>
                                                 &nbsp;
                                                 @if(count($emojis)>0)
-                                                <form class="row" action="{{ route('addEmoji') }}" method="POST">
+                                                <form class="m-5" action="{{ route('addEmoji') }}" method="POST">
                                                     @csrf
-                                                    <div class="col-6">
-                                                        <input type="hidden" value="{{$comment->id}}" name="commentId">
-                                                        <input style="width: 80px;" class="btn btn-outline-primary" id="emojiResult{{$comment->id}}" name="emojiEmj">
-                                                    </div>
-                                                    <div class="col-6">
+                                                    <div class="row">
+                                                    <div class="col-5">
                                                         <button class="btn" type="submit">
                                                             <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
                                                                 <style>
@@ -220,9 +214,34 @@
                                                                     }
                                                                 </style>
                                                                 <path d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480V396.4c0-4 1.5-7.8 4.2-10.7L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z" />
-                                                            </svg> </button>
-                                                    </div>
+                                                            </svg> 
+                                                        </button>
                                                 </form>
+                                                    </div>
+                                                    <div class="col-5">
+                                                        <input type="hidden" value="{{$comment->id}}" name="commentId">
+                                                        <input style="width: 80px;" class="btn btn-outline-primary" id="emojiResult{{$comment->id}}" name="emojiEmj">
+                                                    </div>
+                                                    </div>
+                                                    
+                                                    <div class="row">
+                                                    <button class="btn btn-outline-primary" id="showReplayofComment{{$comment->id}}">
+                                                    <svg style="color: #1f5122"xmlns="http://www.w3.org/2000/svg" height="1em" fill="currentColor" viewBox="0 0 512 512">
+                                                    <path d="M205 34.8c11.5 5.1 19 16.6 19 29.2v64H336c97.2 0 176 78.8 176 176c0 113.3-81.5 163.9-100.2 174.1c-2.5 1.4-5.3 1.9-8.1 1.9c-10.9 0-19.7-8.9-19.7-19.7c0-7.5 4.3-14.4 9.8-19.5c9.4-8.8 22.2-26.4 22.2-56.7c0-53-43-96-96-96H224v64c0 12.6-7.4 24.1-19 29.2s-25 3-34.4-5.4l-160-144C3.9 225.7 0 217.1 0 208s3.9-17.7 10.6-23.8l160-144c9.4-8.5 22.9-10.6 34.4-5.4z"/></svg>
+                                                    </button>
+                                                    </div>
+                                                    <script>
+                                                    document.getElementById('showReplayofComment{{$comment->id}}').addEventListener('click', function() {
+
+                                                        const replayContainer = document.getElementById('replayContainer{{$comment->id}}');
+
+                                                        if (replayContainer.style.display === 'block') {
+                                                            replayContainer.style.display = 'none';
+                                                        } else {
+                                                            replayContainer.style.display = 'block';
+                                                        }
+                                                    });
+                                                </script>
                                                 &nbsp;
                                                 <div id="comment_id" data-comment-id="{{$comment->id}}"></div>
                                                 <button class="btn btn-outline-primary" id="showEmojis{{$comment->id}}">+</button>
@@ -264,6 +283,25 @@
                                     </div>
                                 </a>
                             </li>
+                            <div id="replayContainer{{$comment->id}}" style="display: none;">
+                                <form action="{{ route('commentReplay') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" value="{{$comment->id}}" name="rcId">
+                                    <div class="form-group mt-2">
+                                        <label for="example-text-input" class="form-control-label">Your Reply</label>
+                                        <textarea class="form-control" rows="3" type="text" name="ContentReplay"></textarea>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm">Reply</button>
+                                </form>
+                            </div>
+                            @if (count($comment->replies) > 0)
+                                <!-- @ include('comments.partials.comments', ['comments' => $comment->replies]) -->
+                                
+                                @foreach ($comment->replies as $commentReplie)
+                                {{$commentReplie->Content}}
+                                
+                                @endforeach
+                            @endif
                             @endforeach
                         </ul>
                     </li>

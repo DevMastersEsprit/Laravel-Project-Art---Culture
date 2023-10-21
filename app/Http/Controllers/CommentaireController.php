@@ -194,4 +194,26 @@ class CommentaireController extends Controller
 
         return redirect()->route('comment.index');
     }
+    public function replay(Request $request)
+    {
+    
+        $request->validate([
+            'ContentReplay' => 'required|string|max:190'
+        ]);
+
+        $commentaire = new Commentaire;
+
+        $commentaire->Content = $request->ContentReplay;
+        $commentaire->Likes = 0;
+        $commentaire->Dislikes = 0;
+        $commentaire->ReplyTo = "Comment";
+        $commentaire->parent_comment_id=$request->rcId;
+        $commentaire->user_id = auth()->user()->id;
+        $commentaire->save();
+
+
+        return redirect()->route('comment.index')
+                        ->with('success','Comment added successfully.');
+    }
+
 }
