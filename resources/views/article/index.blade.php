@@ -13,9 +13,9 @@
             <div class="card mb-4">
                 <div class="card-header pb-0 d-flex justify-content-between">
                     {{-- <div> --}}
-                        <h6>Events</h6>
+                        <h6>Articles</h6>
                         <div class="pull-right mb-2">
-                            <a class="btn btn-success" href="{{ route('events.create') }}"> Create event</a>
+                            <a class="btn btn-success" href="{{ route('articles.create') }}"> Create event</a>
                         </div>
                     {{-- </div> --}}
                 </div>
@@ -26,55 +26,38 @@
                                 <tr>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                     </th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Name
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Title
                                     </th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                        Start date
+                                        description
                                     </th>
-                                    <th
-                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        End date</th>
-                                    <th
-                                        class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                        Description</th>
                                     <th
                                         class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                         Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($evenements as $evenement)
+                                @foreach ($articles as $article)
                                     <tr>
-                                        
                                         <td>
                                             <div class="d-flex px-3 py-1">
                                                 <div class="d-flex flex-column justify-content-center">
-                                                    <img src="/eventImages/{{ $evenement->image }}" style="width: 75px;">
+                                                    <img src="/articleImages/{{ $article->image }}" style="width: 75px;">
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="d-flex px-3 py-1">
-                                                <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">{{ $evenement->nom }}</h6>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <p class="text-sm font-weight-bold mb-0">{{ $evenement->date_debut }}</p>
+                                            <p class="text-sm font-weight-bold mb-0">{{ $article->titre }}</p>
                                         </td>
                                         <td class="align-middle text-center text-sm">
-                                            <p class="text-sm font-weight-bold mb-0">{{ $evenement->date_fin }}</p>
-                                        </td>
-                                        <td class="align-middle text-center text-sm">
-                                            <p class="text-sm font-weight-bold mb-0">{{ $evenement->description }}</p>
+                                            <p class="text-sm font-weight-bold mb-0">{{ $article->description }}</p>
                                         </td>
                                         <td class="align-middle text-end">
                                             <div class="d-flex px-3 py-1 justify-content-center align-items-center">
-                                                <form action="{{ route('events.destroy', $evenement->id) }}"
+                                                <form action="{{ route('articles.destroy', $article->id) }}"
                                                     method="Post">
                                                     <a class="btn btn-primary"
-                                                        href="{{ route('events.edit', $evenement->id) }}">Edit</a>
+                                                        href="{{ route('articles.edit', $article->id) }}">Edit</a>
 
                                                     @csrf
                                                     @method('DELETE')

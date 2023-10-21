@@ -33,6 +33,18 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">Image</label>
+                                        <input name="image" type="file" class="form-control"
+                                            placeholder="Enter Image">
+                                        @error('image')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col">
                                     <div class="form-group">
                                         <strong>Start date:</strong>
@@ -63,6 +75,35 @@
                                     @enderror
                                 </div>
                             </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="actors">Select actor(s):</label>
+                                    <div class="select is-multiple">
+                                        <select name="actors[]" multiple class="form-control">
+                                            @foreach ($actors as $actor)
+                                                <option value="{{ $actor->id }}">
+                                                    {{ $actor->fullName }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="places">Select place(s):</label>
+                                    <div class="select">
+                                        <select name="place_id" multiple class="form-control">
+                                            @foreach ($places as $place)
+                                                <option value="{{ $place->id }}">
+                                                    {{ $place->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
                             <button type="submit" class="btn btn-primary ml-3">Submit</button>
                         </div>
 

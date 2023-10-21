@@ -36,6 +36,24 @@
                                 </div>
                             </div>
                             <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                    @if ($evenement->image)
+                                    <img src="/eventImages/{{ $evenement->image }}" alt="image" style="width: 300px;">
+                                    <input type="hidden" name="image" value="{{ $evenement->image }}">
+                                    @error('image')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                @else
+                                    <p>No image available, Please select one !</p>
+                                @endif
+                                 <div class="form-group">
+                                    <label for="exampleInputPassword1">Image</label>
+                                    <input name="image" type="file" class="form-control"
+                                        placeholder="Enter image">
+                                </div>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="col">
                                     <div class="form-group">
                                         <strong>Event start date:</strong>

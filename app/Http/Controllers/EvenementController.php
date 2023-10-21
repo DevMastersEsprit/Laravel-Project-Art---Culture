@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Actor;
 use App\Models\Evenement;
+use App\Models\Place;
 use Illuminate\Http\Request;
 
 class EvenementController extends Controller
@@ -18,6 +20,12 @@ class EvenementController extends Controller
         return view('evenements.index', $data);
     }
 
+    public function indexFront()
+    {
+        $data['evenements'] = Evenement::with('place')->get();
+        return view('evenements.front-index', $data);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -25,7 +33,9 @@ class EvenementController extends Controller
      */
     public function create()
     {
-        return view('evenements.create');
+        $data['actors'] = Actor::all();
+        $data['places'] = Place::all();
+        return view('evenements.create', $data);
     }
 
     /**
@@ -36,25 +46,28 @@ class EvenementController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|alpha',
-            'email' => 'required|email',
-            'address' => 'required'
-        ],[
-            'name.required'=> 'Please entre your name.',
-            'name.alpha'=> 'Name must contains only chars',
-            'email.required'=> 'Email is required'
-        ]);
+        // $request->validate([
+        //     'nom' => 'required|alpha',
+        //     'email' => 'required|email',
+        //     'address' => 'required'
+        // ]);
+        // dd($request->image);
+
+        $imageName = time().'.'.$request->image->extension();
+        $request->image->move(public_path('eventImages'), $imageName);
  
         $evenement = new Evenement;
- 
+        
         $evenement->nom = $request->nom;
+        $evenement->image = $request->imageName;
         $evenement->date_debut = $request->dateDebut;
         $evenement->date_fin = $request->dateFin;
         $evenement->description = $request->description;
+        $evenement->places_id = $request->place_id;
         $evenement->save();
 
-      
+        $evenement->actors()->attach($request->input('actors'));
+
         return redirect()->route('events.index')
                         ->with('success','Event has been created successfully.');
     }
@@ -67,7 +80,8 @@ class EvenementController extends Controller
      */
     public function show($id)
     {
-        return view('events.show',compact('company'));
+        $evenement = Evenement::with('articles')->find($id);
+        return view('evenements.show',compact('evenement'));
     }
 
     /**
@@ -92,7 +106,11 @@ class EvenementController extends Controller
     public function update(Request $request, $id)
     {
         $evenement = Evenement::find($id);
- 
+        if (!is_string($request->image)) {
+            $imageName = time().'.'.$request->image->extension();
+            $request->image->move(public_path('eventImages'), $imageName);
+            $evenement->image = $imageName;
+        }
         $evenement->nom = $request->nom;
         $evenement->date_debut = $request->dateDebut;
         $evenement->date_fin = $request->dateFin;

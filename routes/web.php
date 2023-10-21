@@ -38,8 +38,10 @@ Route::get('/profile-test', function () {
     return view('account-pages/profile');
 });
 Route::resource('/events', EvenementController::class);
+Route::get('/event/list', [EvenementController::class, 'indexFront']);
+
 Route::resource('/articles', ArticleController::class);
-Route::get('/articles/{eventId}', [ArticleController::class,'create']);
+Route::get('/articles/{eventId}', [ArticleController::class, 'create']);
 Route::resource('/payments', PaymentController::class);
 
 Route::get('/checkout', 'App\Http\Controllers\StripeController@checkout')->name('checkout');

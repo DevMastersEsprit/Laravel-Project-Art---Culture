@@ -15,7 +15,8 @@ class ArticleController extends Controller
      */
     public function index()
     {
-        //
+        $data['articles'] = Article::with('evenement')->get();
+        return view("article.index", $data);
     }
 
     /**
@@ -25,7 +26,8 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        return view("article.create");
+        $data['events'] = Evenement::all();
+        return view("article.create", $data);
     }
 
     /**
@@ -36,25 +38,28 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'titre' => 'required|alpha',
-            'contenu' => 'required',
-            'description' => 'required'
-        ], [
-            'title.required' => 'Title is required',
-            'contenu.required' => 'Contenu is required',
-            'description.required' => 'Description is required',
-        ]);
-        $evenement = Evenement::find($request->eventId);
-        if (!$evenement) {
-            $article = new Article;
-            $article->title = $request->title;
-            $article->description = $request->description;
-            $article->contenu = $request->contenu;
-            $evenement->articles()->save($article);
-        }
-        return redirect()->route('events.index')
-            ->with('success', 'Event has been created successfully.');
+        // $request->validate([
+        //     'titre' => 'required|alpha',
+        //     'contenu' => 'required',
+        //     'description' => 'required'
+        // ], [
+        //     'title.required' => 'Title is required',
+        //     'contenu.required' => 'Contenu is required',
+        //     'description.required' => 'Description is required',
+        // ]);
+        $imageName = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('articleImages'), $imageName);
+
+        $article = new Article;
+        $article->titre = $request->title;
+        $article->image = $request->image;
+        $article->description = $request->description;
+        $article->contenu = $request->content;
+        $article->evenement_id = $request->event_id;
+        $article->save();
+
+        return redirect()->route('article.index')
+            ->with('success', 'Article has been created successfully.');
     }
 
     /**
@@ -65,7 +70,8 @@ class ArticleController extends Controller
      */
     public function show($id)
     {
-        //
+        $article = Article::find($id);
+        return view('article.show',compact('article'));
     }
 
     /**
@@ -76,7 +82,9 @@ class ArticleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $events = Evenement::all();
+        $article = Article::find($id);
+        return view('article.edit', compact('article', 'events'));
     }
 
     /**
@@ -88,7 +96,20 @@ class ArticleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $article = Article::find($id);
+        if (!is_string($request->image)) {
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('articleImages'), $imageName);
+            $article->image = $imageName;
+        }
+        $article->titre = $request->title;
+        $article->description = $request->description;
+        $article->contenu = $request->content;
+        $article->evenement_id = $request->event_id;
+        $article->save();
+
+        return redirect()->route('articles.index')
+            ->with('success', 'Article Has Been updated successfully');
     }
 
     /**
@@ -99,6 +120,9 @@ class ArticleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $article = Article::where('id', $id)->firstOrFail();
+        $article->delete();
+        return redirect()->route('articles.index')
+            ->with('success', 'Article has been deleted successfully');
     }
 }
