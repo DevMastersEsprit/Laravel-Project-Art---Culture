@@ -25,11 +25,23 @@
                     <span class="nav-link-text ms-1">Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item mt-3 d-flex align-items-center">
-                <div class="ps-4">
-                    <i class="fab fa-laravel" style="color: #f4645f;"></i>
-                </div>
-                <h6 class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Laravel Examples</h6>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::currentRouteName() == 'events.index' ? 'active' : '' }}"
+                    href="{{ route('events.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64H344V24c0-13.3-10.7-24-24-24s-24 10.7-24 24V64H152V24zM48 192h80v56H48V192zm0 104h80v64H48V296zm128 0h96v64H176V296zm144 0h80v64H320V296zm80-48H320V192h80v56zm0 160v40c0 8.8-7.2 16-16 16H320V408h80zm-128 0v56H176V408h96zm-144 0v56H64c-8.8 0-16-7.2-16-16V408h80zM272 248H176V192h96v56z"/></svg>                    </div>
+                    <span class="nav-link-text ms-1">Events Management</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Route::currentRouteName() == 'articles.index' ? 'active' : '' }}"
+                    href="{{ route('articles.index') }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M168 80c-13.3 0-24 10.7-24 24V408c0 8.4-1.4 16.5-4.1 24H440c13.3 0 24-10.7 24-24V104c0-13.3-10.7-24-24-24H168zM72 480c-39.8 0-72-32.2-72-72V112C0 98.7 10.7 88 24 88s24 10.7 24 24V408c0 13.3 10.7 24 24 24s24-10.7 24-24V104c0-39.8 32.2-72 72-72H440c39.8 0 72 32.2 72 72V408c0 39.8-32.2 72-72 72H72zM176 136c0-13.3 10.7-24 24-24h96c13.3 0 24 10.7 24 24v80c0 13.3-10.7 24-24 24H200c-13.3 0-24-10.7-24-24V136zm200-24h32c13.3 0 24 10.7 24 24s-10.7 24-24 24H376c-13.3 0-24-10.7-24-24s10.7-24 24-24zm0 80h32c13.3 0 24 10.7 24 24s-10.7 24-24 24H376c-13.3 0-24-10.7-24-24s10.7-24 24-24zM200 272H408c13.3 0 24 10.7 24 24s-10.7 24-24 24H200c-13.3 0-24-10.7-24-24s10.7-24 24-24zm0 80H408c13.3 0 24 10.7 24 24s-10.7 24-24 24H200c-13.3 0-24-10.7-24-24s10.7-24 24-24z"/></svg>                    </div>
+                    <span class="nav-link-text ms-1">Articles Management</span>
+                </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'profile' ? 'active' : '' }}"
@@ -56,52 +68,6 @@
                     </div>
                     <span class="nav-link-text ms-1">Area Management</span>
                 </a>
-            </li>
-            <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Pages</h6>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ str_contains(request()->url(), 'tables') == true ? 'active' : '' }}"
-                    href="{{ route('page', ['page' => 'tables']) }}">
-                    <div
-                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Tables</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ str_contains(request()->url(), 'billing') == true ? 'active' : '' }}"
-                    href="{{ route('page', ['page' => 'billing']) }}">
-                    <div
-                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Billing</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'virtual-reality' ? 'active' : '' }}"
-                    href="{{ route('virtual-reality') }}">
-                    <div
-                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-app text-info text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Virtual Reality</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link {{ Route::currentRouteName() == 'rtl' ? 'active' : '' }}"
-                    href="{{ route('rtl') }}">
-                    <div
-                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-world-2 text-danger text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">RTL</span>
-                </a>
-            </li>
-            <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'comment' ? 'active' : '' }}"
@@ -145,24 +111,6 @@
                         <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
                     </div>
                     <span class="nav-link-text ms-1">Profile</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link " href="{{ route('sign-in-static') }}">
-                    <div
-                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-single-copy-04 text-warning text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Sign In</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link " href="{{ route('sign-up-static') }}">
-                    <div
-                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                        <i class="ni ni-collection text-info text-sm opacity-10"></i>
-                    </div>
-                    <span class="nav-link-text ms-1">Sign Up</span>
                 </a>
             </li>
         </ul>

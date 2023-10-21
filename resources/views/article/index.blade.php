@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Event Management'])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Article Management'])
     <div class="row mt-4 mx-4">
         <div class="col-12">
             @if ($message = Session::get('success'))
@@ -15,7 +15,7 @@
                     {{-- <div> --}}
                         <h6>Articles</h6>
                         <div class="pull-right mb-2">
-                            <a class="btn btn-success" href="{{ route('articles.create') }}"> Create event</a>
+                            <a class="btn btn-success" href="{{ route('articles.create') }}"> Create article</a>
                         </div>
                     {{-- </div> --}}
                 </div>
