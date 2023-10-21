@@ -20,9 +20,11 @@ class TicketFactory extends Factory
             'name' => $faker->word,
             'ref_ticket' => $faker->unique()->word,
             'description' => $faker->paragraph,
-            'amount' => $faker->randomFloat(2, 10, 100), 
-            'start_event_date' => $faker->dateTimeBetween('now', '+1 year'), 
-            'end_event_date' => $faker->dateTimeBetween('now', '+1 year'), 
+            'amount' => $faker->randomFloat(2, 10, 100),
+            'type'=> $faker->word,
+            'nbre_tickets' =>$faker->randomNumber(3),
+
+
         ];
     }
 }

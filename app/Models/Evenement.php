@@ -11,4 +11,16 @@ class Evenement extends Model
     public function articles(){
         return $this->hasMany(Article::class);
     }
+    public function commentaires(){
+        return $this->hasMany(Commentaire::class);
+    }
+    public function actors(){
+        return $this->belongsToMany(Actor::class);
+    }
+    public function tickets(){
+        return $this->hasMany(Ticket::class);
+    }
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

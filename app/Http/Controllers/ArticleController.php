@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Article;
+use App\Models\Evenement;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
@@ -23,7 +25,7 @@ class ArticleController extends Controller
      */
     public function create()
     {
-        //
+        return view("article.create");
     }
 
     /**
@@ -34,7 +36,25 @@ class ArticleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'titre' => 'required|alpha',
+            'contenu' => 'required',
+            'description' => 'required'
+        ], [
+            'title.required' => 'Title is required',
+            'contenu.required' => 'Contenu is required',
+            'description.required' => 'Description is required',
+        ]);
+        $evenement = Evenement::find($request->eventId);
+        if (!$evenement) {
+            $article = new Article;
+            $article->title = $request->title;
+            $article->description = $request->description;
+            $article->contenu = $request->contenu;
+            $evenement->articles()->save($article);
+        }
+        return redirect()->route('events.index')
+            ->with('success', 'Event has been created successfully.');
     }
 
     /**

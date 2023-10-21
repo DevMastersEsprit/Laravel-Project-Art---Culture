@@ -36,11 +36,15 @@ class EvenementController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'name' => 'required',
-        //     'email' => 'required',
-        //     'address' => 'required'
-        // ]);
+        $request->validate([
+            'name' => 'required|alpha',
+            'email' => 'required|email',
+            'address' => 'required'
+        ],[
+            'name.required'=> 'Please entre your name.',
+            'name.alpha'=> 'Name must contains only chars',
+            'email.required'=> 'Email is required'
+        ]);
  
         $evenement = new Evenement;
  

@@ -20,7 +20,8 @@ return new class extends Migration
             $table->string("description");
             $table->unsignedBigInteger('evenement_id')->nullable();
             $table->foreign('evenement_id')->references('id')->on('evenements')->onDelete('cascade')->onUpdate('cascade');
-
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

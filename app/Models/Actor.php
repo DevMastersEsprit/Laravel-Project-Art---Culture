@@ -28,5 +28,8 @@ class Actor extends Model
     {
         return $this->belongsToMany(Domain::class);
     }
+    public function evenements(){
+        return $this->belongsToMany(Evenement::class);
+    }
 
 }

@@ -12,4 +12,8 @@ class Article extends Model
     public function evenement(){
         return $this->belongsTo(Evenement::class);
     }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

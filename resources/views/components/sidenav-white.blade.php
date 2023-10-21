@@ -13,7 +13,7 @@
             </span>
         </button>
         <div class="collapse navbar-collapse" id="navigation">
-            {{-- <ul class="navbar-nav mx-auto ms-xl-auto">
+            <ul class="navbar-nav mx-auto ms-xl-auto">
                 <li class="nav-item">
                     <a class="nav-link d-flex align-items-center me-2 " aria-current="page"
                         href="{{ route('dashboard') }}">
@@ -71,7 +71,7 @@
                         Sign In
                     </a>
                 </li>
-            </ul> --}}
+            </ul>
             <ul class="navbar-nav d-lg-block d-none">
                 <li class="nav-item">
                     <a href="https://www.creative-tim.com/product/corporate-ui-dashboard-laravel" target="_blank"
