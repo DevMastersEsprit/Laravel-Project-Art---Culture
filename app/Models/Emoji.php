@@ -16,6 +16,6 @@ class Emoji extends Model
 
     public function commentaires()
     {
-        return $this->belongsToMany(Commentaire::class);
+        return $this->belongsToMany(Commentaire::class)->withTimestamps();
     }
 }
