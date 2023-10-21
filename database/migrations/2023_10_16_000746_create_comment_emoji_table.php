@@ -19,8 +19,10 @@ return new class extends Migration
             $table->unsignedBigInteger('emoji_id');
             $table->timestamps();
 
-            $table->foreign('commentaire_id')->references('id')->on('commentaires')->onDelete('cascade');
-            $table->foreign('emoji_id')->references('id')->on('emojis')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('commentaire_id')->references('id')->on('commentaires')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreign('emoji_id')->references('id')->on('emojis')->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

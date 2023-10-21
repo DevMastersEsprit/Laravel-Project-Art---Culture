@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Commentaire;
 use App\Models\Emoji;
 use Illuminate\Http\Request;
-use Mockery\Undefined;
+use Illuminate\Support\Facades\DB;
 
 class CommentaireController extends Controller
 {
@@ -16,9 +16,8 @@ class CommentaireController extends Controller
      */
     public function index()
     {
-        $commentaires = Commentaire::with('emojis')->get();
+        $commentaires = Commentaire::with('emojis','user')->get();
         $emojis = Emoji::all();
-
         return view('Commentaire.index', compact('commentaires','emojis'));
     }
 
@@ -40,7 +39,7 @@ class CommentaireController extends Controller
      */
     public function store(Request $request)
     {
-        
+    
         $request->validate([
             'Content' => 'required|string|max:190'
         ]);
@@ -50,7 +49,8 @@ class CommentaireController extends Controller
         $commentaire->Content = $request->Content;
         $commentaire->Likes = 0;
         $commentaire->Dislikes = 0;
-        $commentaire->ReplyTo = "Noting";
+        $commentaire->ReplyTo = "Nothing";
+        $commentaire->user_id = auth()->user()->id;
         $commentaire->save();
 
 
@@ -77,20 +77,8 @@ class CommentaireController extends Controller
      */
     public function edit($id)
     {
-        $commentaire = Commentaire::find($id);
-        $emojis = $commentaire->emojis;
-        
-        // foreach ($commentaires as $c) {
-        //     if($c->id == $commentaire->id){
-        //         foreach ($c->emojis as $emoji) {  
-        //             $c->emojis()->detach($emoji);
-        //         }
-        //     }
-            
-        // }
-        // ::with('emojis')->get();
-        // dd($commentaire);
-        return view('commentaire.edit',compact('commentaire','emojis'));
+        $commentaire = Commentaire::with('emojis','user')->find($id);
+        return view('commentaire.edit',compact('commentaire'));
     }
 
     /**
@@ -107,14 +95,10 @@ class CommentaireController extends Controller
         ]);
 
         $commentaire = Commentaire::find($id);
-        
-        // $commentaires = Commentaire::with('emojis')->get();
-        
 
         $commentaire->Content = $request->Content;
         $commentaire->Likes = 0;
         $commentaire->Dislikes = 0;
-        $commentaire->ReplyTo = "Noting";
         $commentaire->emojis()->detach();
 
         $commentaire->save();
@@ -143,7 +127,7 @@ class CommentaireController extends Controller
         $commentaire = Commentaire::find($id) ;
         $commentaire->Likes = $commentaire->Likes+1; 
         $commentaire->save();
-        redirect()->route('comment.index');
+        return redirect()->route('comment.index');
     
     }
     public function dislike($id)
@@ -160,28 +144,75 @@ class CommentaireController extends Controller
         
         $commentId = $request->input('commentId');
         $emojiEmj = $request->input('emojiEmj');
+
+        
+
         if($emojiEmj == null){
             return redirect()->route('comment.index')
             ->with('errorEmj','Choose Emj') ;
         }else{
             $commentaire = Commentaire::find($commentId) ;
         
+            $selectedEmojis = null;
             $emojis = Emoji::all();
             foreach ($emojis as $emoji) {
                 if ($emoji->emj == $emojiEmj) {
                     $selectedEmojis = $emoji;
                 }
             }
-            $commentaire->emojis()->attach($selectedEmojis);
-    
-            return redirect()->route('comment.index');
+            if($selectedEmojis == null){
+                return redirect()->route('comment.index')
+                ->with('errorEmj','Choose Emj from list') ;
+            }else{ 
+                //$commentaire->emojis()->sync([$selectedEmojis->id => ['user_id' => auth()->user()->id]],false);
+                DB::table('commentaire_emoji')->updateOrInsert(
+                    [
+                        'commentaire_id' => $commentId,
+                        'user_id' => auth()->user()->id,
+                    ],
+                    [
+                        'emoji_id' => $selectedEmojis->id,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]
+                );
+                return redirect()->route('comment.index');
+            }
         }
         
     }
 
     public function removeEmoji(Request $request)
     {
-        //$commentaire->emojis()->detach($emoji);
+
+        $cId = $request->input('cId');
+        $commentaire = Commentaire::find($cId);
+        $commentaire->emojis()
+        ->wherePivot('user_id', auth()->user()->id)
+        ->detach();
+
         return redirect()->route('comment.index');
     }
+    public function replay(Request $request)
+    {
+    
+        $request->validate([
+            'ContentReplay' => 'required|string|max:190'
+        ]);
+
+        $commentaire = new Commentaire;
+
+        $commentaire->Content = $request->ContentReplay;
+        $commentaire->Likes = 0;
+        $commentaire->Dislikes = 0;
+        $commentaire->ReplyTo = "Comment";
+        $commentaire->parent_comment_id=$request->rcId;
+        $commentaire->user_id = auth()->user()->id;
+        $commentaire->save();
+
+
+        return redirect()->route('comment.index')
+                        ->with('success','Comment added successfully.');
+    }
+
 }

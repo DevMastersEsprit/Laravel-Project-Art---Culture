@@ -4,7 +4,7 @@
 @include('layouts.navbars.auth.topnav', ['title' => 'Emoji'])
 
 @if ($message = Session::get('success'))
-<div class="alert alert-success" role="alert">
+<div class="alert alert-success" role="alert" style="margin: 0 10px;">
     <p>{{ $message }}</p>
 </div>
 @endif
@@ -65,11 +65,11 @@
                         <div class="d-flex align-items-center row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="example-text-input" class="form-control-label">Emoji content</label>
-                                    <textarea class="form-control" rows="3" type="text" name="emj"></textarea>
                                     @error('emj')
                                     <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
                                     @enderror
+                                    <label for="example-text-input" class="form-control-label">Emoji content</label>
+                                    <textarea id="textareaEmoji" class="form-control" rows="3" type="text" name="emj"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -77,44 +77,74 @@
                             </div>
                         </div>
                     </form>
+
                 </div>
                 <div class="card-body">
                     <hr class="horizontal dark">
                     <p class="text-uppercase text-sm">All Emojis </p>
+
+                    <!-- @ foreach ($emojisapi as $emojiapi)
+                    { { $emojiapi }}
+                    @ endforeach -->
                     @if ($emojis->count() > 0)
                     <ul class="col-12">
                         <li class=" pe-2  align-items-center">
                             <ul class=" px-2 py-3 me-sm-n4">
-                                @foreach ($emojis as $emoji)
                                 <li class="mb-2">
                                     <a class="border-radius-md">
                                         <div class="row">
-                                            <div class="my-auto col-4">
+                                            @foreach ($emojis as $emoji)
+                                            <div class="col-4 btn btn-outline-primary">
                                                 {{ $emoji->emj }}
-                                                <!-- <img src="{{ asset('img/team-2.jpg') }}" class="avatar avatar-sm  me-3 "> -->
-                                            </div>
-                                            <div class="col-4">
                                                 <p class="text-xs text-secondary mb-5">
                                                     <i class="fa fa-clock me-1"></i>
                                                     {{ $emoji->created_at }}
-                                                    <!--13 minutes ago-->
                                                 </p>
-                                            </div>
-                                            <div class="col-2 ">
-                                                <form action="{{ route('emoji.destroy', $emoji->id) }}" method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
 
-                                                    <button type="submit" class="btn btn-danger "><i class="far fa-trash-alt "></i></button>
-                                                </form>
+                                                <button type="button" class="delete-btn btn btn-danger "  onclick="showAlertDialog({{$emoji}})"><i class="far fa-trash-alt "></i></button>
                                             </div>
+                                            @endforeach
                                         </div>
                                     </a>
                                 </li>
-                                @endforeach
                             </ul>
                         </li>
                     </ul>
+                    <div id="overlay" class="overlay"></div>
+
+                    <div id="alertBox" class="alert-box">
+                        <div class="alert-header">
+                            Are you sure you want to delete emoji <span id="emojiToDelete"></span> ?
+                        </div>
+                        
+                        <div class="alert-content">
+                            <div class="d-flex flex-row-reverse">
+                                <form action="{{ route('emoji.destroy','') }}" method="POST" id="deleteEmoji">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger "><i class="far fa-trash-alt "></i></button>
+                                </form>
+                                &nbsp;
+                                <button type="button" class="btn btn-outline-primary " onclick="closeAlertDialog()">Cancel</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function showAlertDialog(emoji) {
+                            console.log("data"+JSON.stringify(emoji));
+                            document.getElementById("emojiToDelete").textContent = emoji["emj"];
+                            document.getElementById("deleteEmoji").action = "{{ route('emoji.destroy', '') }}" + "/" + emoji["id"];
+
+                            document.getElementById("overlay").style.display = "block";
+                            document.getElementById("alertBox").style.display = "block";
+                        }
+
+                        function closeAlertDialog() {
+                            document.getElementById("overlay").style.display = "none";
+                            document.getElementById("alertBox").style.display = "none";
+                        }
+                    </script>
                 </div>
                 @else
                 No emoji yet

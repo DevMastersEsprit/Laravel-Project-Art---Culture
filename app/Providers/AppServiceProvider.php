@@ -2,10 +2,8 @@
 
 namespace App\Providers;
 
-use App\Models\Emoji;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Validator;
 
 
 class AppServiceProvider extends ServiceProvider

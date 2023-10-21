@@ -90,21 +90,15 @@
                                         <div class="row">
                                             <div class="my-auto col-4">
                                                 <img src="{{asset('img/team-2.jpg')}}" class="avatar avatar-sm  me-3 ">
+                                                <span class="font-weight-bold ">{{$commentaire->user->username}}</span> &nbsp; {{ $commentaire->Content }}
                                             </div>
                                             <div class="col-4">
                                                 <p class="text-xs text-secondary mb-5">
                                                     <i class="fa fa-clock me-1"></i>
-                                                    {{ $commentaire->created_at	}}
-                                                    <!--13 minutes ago-->
+                                                    {{ $commentaire->created_at->diffForHumans() }}
                                                 </p>
                                             </div>
                                         </div>
-                                        <div class=" row  justify-content-center">
-                                            <h6 class="text-sm font-weight-normal mb-1">
-                                                <span class="font-weight-bold ">User</span> &nbsp; {{ $commentaire->Content }}
-                                            </h6>
-                                        </div>
-
                                         <div class="d-flex flex-row-reverse">
                                             <button  class="btn btn-outline-success ">
                                                 {{$commentaire->Likes}}
@@ -125,7 +119,7 @@
                                                 $emojiCounts = [];
                                                 @endphp
 
-                                                @foreach ($emojis as $emoji)
+                                                @foreach ($commentaire->emojis as $emoji)
                                                 @php
                                                 $emj = $emoji->emj;
                                                 if (array_key_exists($emj, $emojiCounts)) {

@@ -103,7 +103,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put('/comment/like/{id}', [CommentaireController::class, 'like'])->name("like");
     Route::put('/comment/dislike/{id}', [CommentaireController::class, 'dislike'])->name("dislike");
     Route::post('/comment/addEmoji', [CommentaireController::class, 'addEmoji'])->name('addEmoji');
-    Route::post('/comment/remove-emoji', [CommentaireController::class, 'removeEmoji'])->name('comment.removeEmoji');
+    Route::post('/comment/removeEmoji', [CommentaireController::class, 'removeEmoji'])->name('removeEmoji');
+    Route::post('/comment/replay', [CommentaireController::class, 'replay'])->name('commentReplay');
     Route::put('/comment/like/{id}', [CommentaireController::class, 'like'])->name("like");
     Route::put('/comment/dislike/{id}', [CommentaireController::class, 'dislike'])->name("dislike");
 
