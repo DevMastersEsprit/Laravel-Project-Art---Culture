@@ -19,6 +19,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\EmojiController;
 use App\Http\Controllers\ArtistInformation;
+use App\Http\Controllers\UserPlaceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,11 @@ Route::get('/', function () {
 Route::get('/profile-test', function () {
     return view('account-pages/profile');
 });
+
+Route::get('/events/{eventId}/places', [UserPlaceController::class,'showPlaceAreas']);
+Route::get('/errorplace', function () {
+    return view('account-pages/error');
+})->name('errorplace');
 Route::resource('/events', EvenementController::class);
 Route::get('/event/list', [EvenementController::class, 'indexFront']);
 
@@ -71,7 +77,7 @@ Route::resource('areas', AreaController::class);
 
 Route::delete('/areas/{id}', [AreaController::class, 'destroy'])->name('areas.destroy');
 
-//Domain route 
+//Domain route
 Route::resource('/domain-management', DomainController::class);
 
 Route::get('/artists', [ArtistInformation::class, 'index']);

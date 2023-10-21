@@ -13,6 +13,7 @@
     },
     "dependencies": {
         "font-awesome": "^4.7.0",
+        "leaflet": "^1.9.4",
         "perfect-scrollbar": "^1.5.5"
     }
 }
