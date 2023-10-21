@@ -4,7 +4,7 @@
 @include('layouts.navbars.auth.topnav', ['title' => 'Comment'])
 
 @if ($message = Session::get('success'))
-<div class="alert alert-success" role="alert">
+<div class="alert alert-success" role="alert" style="margin: 0 10px;">
     <p>{{ $message }}</p>
 </div>
 @endif

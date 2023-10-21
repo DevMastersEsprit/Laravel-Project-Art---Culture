@@ -95,18 +95,13 @@
                                         <div class="row">
                                             @foreach ($emojis as $emoji)
                                             <div class="col-4 btn btn-outline-primary">
-                                                    {{ $emoji->emj }}
-                                                    <p class="text-xs text-secondary mb-5">
-                                                        <i class="fa fa-clock me-1"></i>
-                                                        {{ $emoji->created_at }}
-                                                        <!--13 minutes ago-->
-                                                    </p>
-                                                    <form action="{{ route('emoji.destroy', $emoji->id) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
+                                                {{ $emoji->emj }}
+                                                <p class="text-xs text-secondary mb-5">
+                                                    <i class="fa fa-clock me-1"></i>
+                                                    {{ $emoji->created_at }}
+                                                </p>
 
-                                                        <button type="submit" class="btn btn-danger "><i class="far fa-trash-alt fa-sm"></i></button>
-                                                    </form>
+                                                <button type="button" class="delete-btn btn btn-danger "  onclick="showAlertDialog({{$emoji}})"><i class="far fa-trash-alt "></i></button>
                                             </div>
                                             @endforeach
                                         </div>
@@ -115,6 +110,41 @@
                             </ul>
                         </li>
                     </ul>
+                    <div id="overlay" class="overlay"></div>
+
+                    <div id="alertBox" class="alert-box">
+                        <div class="alert-header">
+                            Are you sure you want to delete emoji <span id="emojiToDelete"></span> ?
+                        </div>
+                        
+                        <div class="alert-content">
+                            <div class="d-flex flex-row-reverse">
+                                <form action="{{ route('emoji.destroy','') }}" method="POST" id="deleteEmoji">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger "><i class="far fa-trash-alt "></i></button>
+                                </form>
+                                &nbsp;
+                                <button type="button" class="btn btn-outline-primary " onclick="closeAlertDialog()">Cancel</button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        function showAlertDialog(emoji) {
+                            console.log("data"+JSON.stringify(emoji));
+                            document.getElementById("emojiToDelete").textContent = emoji["emj"];
+                            document.getElementById("deleteEmoji").action = "{{ route('emoji.destroy', '') }}" + "/" + emoji["id"];
+
+                            document.getElementById("overlay").style.display = "block";
+                            document.getElementById("alertBox").style.display = "block";
+                        }
+
+                        function closeAlertDialog() {
+                            document.getElementById("overlay").style.display = "none";
+                            document.getElementById("alertBox").style.display = "none";
+                        }
+                    </script>
                 </div>
                 @else
                 No emoji yet

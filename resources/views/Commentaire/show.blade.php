@@ -13,12 +13,37 @@
                                 </a>
                             </div>
                             <div class="col-2">
-                                <form action="{{ route('comment.destroy', $comment->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger "><i class="far fa-trash-alt "></i></button>
-                                </form>
+                                <button type="button" class="btn btn-danger " onclick="showAlertDialog()"><i class="far fa-trash-alt "></i></button>
+                                <div id="overlay" class="overlay"></div>
+                                <div id="alertBox" class="alert-box">
+                                    <div class="alert-header">
+                                        Are you sure you want to delete comment ?
+                                    </div>
+                                    <div class="alert-content">
+                                        <div class="d-flex flex-row-reverse">
+                                            <form action="{{ route('comment.destroy', $comment->id) }}" method="POST" id="deleteComment">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger "><i class="far fa-trash-alt "></i></button>
+                                            </form>
+                                            &nbsp;
+                                            <button type="button" class="btn btn-outline-primary " onclick="closeAlertDialog()">Cancel</button>
+
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            <script>
+                                function showAlertDialog() {
+                                    document.getElementById("overlay").style.display = "block";
+                                    document.getElementById("alertBox").style.display = "block";
+                                }
+
+                                function closeAlertDialog() {
+                                    document.getElementById("overlay").style.display = "none";
+                                    document.getElementById("alertBox").style.display = "none";
+                                }
+                            </script>
                             @endif
                             <div class="col-4">
                                 <p class="text-xs text-secondary mb-5">
@@ -77,7 +102,7 @@
                                 <form class="row" action="{{ route('addEmoji') }}" method="POST">
                                     @csrf
                                     <input type="hidden" value="{{$commentaire->id}}" name="commentId">
-                                    
+
 
                                     <button class="btn col-5" type="submit">
                                         <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512">
@@ -89,7 +114,7 @@
                                             <path d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480V396.4c0-4 1.5-7.8 4.2-10.7L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z" />
                                         </svg>
                                     </button>
-                                    
+
                                     <input class=" col-6 btn btn-outline-primary" id="emojiResult{{$comment->id}}" name="emojiEmj">
                                 </form>
                             </div>
