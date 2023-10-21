@@ -13,6 +13,7 @@ class PlaceController extends Controller
         return view('pages.place-management', compact('places'));
     }
 
+
     public function create()
     {
         return view('pages.place.create');
