@@ -49,7 +49,7 @@ class CommentaireController extends Controller
         $commentaire->Content = $request->Content;
         $commentaire->Likes = 0;
         $commentaire->Dislikes = 0;
-        $commentaire->ReplyTo = "Noting";
+        $commentaire->ReplyTo = "Nothing";
         $commentaire->user_id = auth()->user()->id;
         $commentaire->save();
 
@@ -99,7 +99,6 @@ class CommentaireController extends Controller
         $commentaire->Content = $request->Content;
         $commentaire->Likes = 0;
         $commentaire->Dislikes = 0;
-        $commentaire->ReplyTo = "Noting";
         $commentaire->emojis()->detach();
 
         $commentaire->save();
