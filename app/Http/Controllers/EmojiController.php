@@ -6,7 +6,6 @@ use App\Rules\EmojiValidationRule;
 
 use App\Models\Emoji;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 
 
 
@@ -20,12 +19,7 @@ class EmojiController extends Controller
     public function index()
     {
         $emojis = Emoji::all();
-        // $response = Http::get('https://emojipedia.org/emojis/');
-        // $emojisapi = $response->body();
-
-        return view('Emoji.index', compact('emojis'
-        // ,'emojisapi'
-    ));
+        return view('Emoji.index', compact('emojis'));
     
     }
 
