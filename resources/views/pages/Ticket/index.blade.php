@@ -172,8 +172,8 @@
     <div class="col-12">
     <div class="alert alert-light d-flex justify-content-between align-items-center" role="alert">
     <span>This feature is available in <strong>Argon Dashboard 2 Pro Laravel</strong>. Check it <strong><a href="https://www.creative-tim.com/product/argon-dashboard-pro-laravel" target="_blank">here</a></strong></span>
-    <a class="btn btn-primary btn-sm"  target="_blank" type="button" href="{{ route('payments.create') }}">Add a payment</a>
-    <a class="btn btn-primary btn-sm"  target="_blank" type="button" href="{{ route('payments.create') }}">view your tickets</a>
+    <a class="btn btn-primary btn-sm"  target="_blank" type="button" href="{{ route('tickets.create') }}">Add a ticket</a>
+    <a class="btn btn-primary btn-sm"  target="_blank" type="button" href="{{ route('tickets.create') }}">view all tickets</a>
 </div>
 
     <div class="card mb-4">
@@ -185,18 +185,11 @@
     <table class="table align-items-center mb-0">
     <thead>
     <tr>
-    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">Card Security Code</th>
-    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 align-middle text-center">Cardholder_Name 
+    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">Name</th>
+    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 align-middle text-center">Ticket_Ref
     </th>
-    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">
-    Card Number</th>
-    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">
-   Card Expiration Date</th>
-    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">
-    Address</th>
-
-    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">
-    Payment method</th>
+    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">Description</th>
+    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">Amount</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">
  Action</th>
 
@@ -204,28 +197,26 @@
     </thead>
     <tbody>
     <tr>
-      @foreach ($payments as $payment)
+      @foreach ($tickets as $ticket)
       
                     <tr>
-                        <td class=" align-middle text-center">{{ $payment->Card_Security_Code }}</td>
-                        <td class=" align-middle text-center">{{ $payment->Cardholder_Name }}</td>
-                        <td class=" align-middle text-center">{{ $payment->Card_Number }}</td>
-                        <td class=" align-middle text-center">{{ $payment->Card_Expiration_Date}}</td>
-                        
-                        <td class=" align-middle text-center">{{ $payment->Address }}</td>
-                <td class=" align-middle text-center">{{ $payment->payment_method }}</td>
+                        <td class=" align-middle text-center">{{ $ticket->name_ticket}}</td>
+                        <td class=" align-middle text-center">{{ $ticket->ref_ticket }}</td>
+                        <td class=" align-middle text-center">{{ $ticket-> description}}</td>
+                        <td class=" align-middle text-center">{{ $ticket->amount}}</td>
 
-                                                <td class=" align-middle text-center">
+                        <td class=" align-middle text-center">{{ $ticket->type }}</td>
+                        <td class=" align-middle text-center">
                                                     
-                                                <a class="text-sm font-weight-bold mb-0" href="{{ route('payments.edit', $payment->id) }}">Edit</a>
-                                                 <td><form action="{{ route('payments.destroy', $payment->id) }}" method="POST" style="display: inline">
+                                                <a class="text-sm font-weight-bold mb-0" href="{{ route('tickets.edit', $ticket->id) }}">Edit</a>
+                                                 <td><form action="{{ route('tickets.destroy', $ticket->id) }}" method="POST" style="display: inline">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-primary btn-sm" type="link" onclick="return confirm('Are you sure you want to delete this payment?')">Delete</button>
                     </form></td>
 
                    <td class="align-middle text-center">
-    <a class="btn btn-primary btn-sm" href="{{ route('payments.show', $payment->id) }}">Details</a>
+    <a class="btn btn-primary btn-sm" href="{{ route('tickets.show', $ticket->id) }}">Details</a>
 </td>
                                                     </td>
 

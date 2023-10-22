@@ -15,12 +15,14 @@ return new class extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->decimal('amount', 10, 2);
-            $table->string('payment_method', 50);
-            $table->string('transaction_id');
-            $table->string('status', 20);
-            $table->timestamp('payment_date');
-           
+            $table->decimal('Card_Security_Code', 10);
+            $table->string('Cardholder_Name', 50);
+            $table->decimal('Card_Number');
+            $table->timestamp('Card_Expiration_Date');
+            $table->string('Address', 20);
+            $table->string('payment_method', 20);
+
+             
             $table->timestamps();
         });
     }

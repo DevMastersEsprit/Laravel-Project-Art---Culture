@@ -17,12 +17,11 @@ class TicketFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $faker->word,
+            'name_ticket' => $faker->word,
             'ref_ticket' => $faker->unique()->word,
             'description' => $faker->paragraph,
             'amount' => $faker->randomFloat(2, 10, 100),
-            'type'=> $faker->word,
-            'nbre_tickets' =>$faker->randomNumber(3),
+            'type'=> $faker->randomElement(['Standard Ticket', 'VIP Ticket', 'Student Ticket', 'Family Ticket', 'Group Ticket']),
 
 
         ];
