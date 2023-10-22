@@ -13,11 +13,13 @@ class PaymentFactory extends Factory
     {
         return [
             
-            'amount' => $this->faker->randomFloat(2, 10, 1000),
-            'payment_method' => $this->faker->randomElement(['Credit Card', 'PayPal', 'Bank Transfer']),
-            'transaction_id' => $this->faker->uuid,
-            'status' => $this->faker->randomElement(['Pending', 'Success', 'Failed']),
-            'payment_date' => $this->faker->dateTimeThisMonth,
+            
+           'Card_Security_Code' => $this->faker->numberBetween(100, 999),
+            'Cardholder_Name' => $this->faker->name,
+            'Card_Number' => $this->faker->creditCardNumber,
+            'Card_Expiration_Date' => $this->faker->creditCardExpirationDate,
+            'Address' => $this->faker->address,
+            'payment_method' => $this->faker->randomElement(['Credit Card', 'PayPal', 'Stripe', 'Other']),
         ];
     }
 }

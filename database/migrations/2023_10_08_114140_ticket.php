@@ -12,29 +12,28 @@ return new class extends Migration {
      */
     public function up()
     {
-        Schema::create('ticket', function (Blueprint $table) {
+        Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name_ticket');
             $table->string('ref_ticket');
             $table->text('description'); 
             $table->string('type', 50);
             $table->decimal('amount', 10, 2); 
-            $table->unsignedBigInteger('payments_id');
-            $table->integer('nbre_tickets'); 
-            
+            $table->unsignedBigInteger('payments_id')->nullable();
+
             $table->foreign('payments_id')
                 ->references('id')
                 ->on('payments')
                 ->onDelete('restrict')
                 ->onUpdate('restrict');
             $table->timestamps();
-            $table->unsignedBigInteger('evenement_id');
+            $table->unsignedBigInteger('evenement_id')->nullable();
             $table->foreign('evenement_id')
                 ->references('id')
                 ->on('evenements')
                 ->onDelete('restrict')
                 ->onUpdate('restrict');
-                $table->unsignedBigInteger('user_id');
+                $table->unsignedBigInteger('user_id')->nullable();
                 $table->foreign('user_id')
                     ->references('id')
                     ->on('users')

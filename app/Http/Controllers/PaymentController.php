@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Payment;
+use App\Models\Ticket;
 
 
 class PaymentController extends Controller
@@ -29,6 +30,7 @@ class PaymentController extends Controller
      */
 public function create()
 {
+
 
    return view('Payment.create');
 }
@@ -56,10 +58,15 @@ public function create()
     public function store(Request $request)
 {
     $request->validate([
-        'amount' => 'required',
-        'name' => 'required',
-        'age' => 'required',
-        'payment_method' => 'required',
+        'Card_Security_Code' => 'required|numeric|digits:3', // Exige un code de sécurité à 3 chiffres
+        'Cardholder_Name' => 'required|string|max:255|regex:/^[a-zA-Z0-9\s]+$/', // Exige un nom de titulaire de carte de crédit
+        'Card_Number' => 'required|numeric|digits:16', // Exige un numéro de carte de crédit à 16 chiffres
+        'Card_Expiration_Date' => 'required|date|after_or_equal:today', // Exige une date d'expiration valide dans le futur
+        'Address' => 'required|string', // Exige une adresse sous forme de chaîne
+        'payment_method' => 'required|in:Credit Card,PayPal,Bank Transfer', // Exige que la méthode de paiement soit l'une des options spécifiées (Crédit, PayPal, Virement bancaire)
+        
+        
+        
     ]);
 
 
@@ -94,14 +101,14 @@ public function create()
     {
         $payment = Payment::find($id);
  
-        $payment->amount = $request->amount;
-        $payment->payment_method = $request->payment_method;
-        $payment->transaction_id = $request->transaction_id;
-        $payment->status = $request->status;
-        $payment->payment_date = $request->payment_date;
+        $payment-> Card_Security_Code= $request->Card_Security_Code;
+       $payment->payment_method = $request->payment_method;
+        $payment->Cardholder_Name = $request->Cardholder_Name;
+        $payment->Card_Expiration_Date = $request->Card_Expiration_Date;
+        $payment->Address = $request->Address;
 
         $payment->save();
-     
+          
         return redirect()->route('payments.index')
                         ->with('success','Payment Has Been updated successfully');
     }

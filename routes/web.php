@@ -41,6 +41,10 @@ Route::resource('/events', EvenementController::class);
 Route::resource('/articles', ArticleController::class);
 Route::get('/articles/{eventId}', [ArticleController::class,'create']);
 Route::resource('/payments', PaymentController::class);
+Route::resource('/tickets', TicketController::class);
+
+// Route::get('/tickets/indexuser', 'TicketController@indexuser')->name('tickets.indexuser');
+// Route::get('/admin-tickets', 'App\Http\Controllers\TicketController@index_admin')->name('admin-tickets');
 
 Route::get('/checkout', 'App\Http\Controllers\StripeController@checkout')->name('checkout');
 Route::post('/session', 'App\Http\Controllers\StripeController@session')->name('session');
@@ -119,4 +123,3 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 });
 
-Route::resource('tickets', TicketController::class);

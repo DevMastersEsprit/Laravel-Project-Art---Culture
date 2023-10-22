@@ -5,76 +5,141 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Ticket;
+use App\Models\Payment;
 
 class TicketController extends Controller
 {
+    
+     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        // Récupérez toutes les transactions de paiement depuis la base de données
-        $tickets = Ticket::all();
-    
-        // Chargez la vue 'payments.index' en passant les transactions comme données.
-        return view('Ticket.index', compact('tickets'));
+      
+        if ($this->isAdmin()) {
+            // For admin, retrieve all tickets from the database
+            $tickets = Ticket::all();
+            return view('pages.Ticket.index', compact('tickets'));
+        } else {
+            // For users, retrieve only their own tickets (adjust this part according to your user role logic)
+             $tickets = Ticket::all();
+
+            return view('pages.Ticket.indexuser', compact('tickets'));
+        }
+    }
+    // public function index_admin() {
+    //     $tickets = Ticket::all();
+
+    //     return view('pages.Ticket.index', compact('tickets'));
+
+
+    // }
+    /** Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+public function create()
+{
+    $payments = Payment::all();
+
+    return view('pages.Ticket.create', compact('payments'));
+}
+public function store(Request $request)
+{
+    $request->validate([
+        'name_ticket' => 'required|string|max:255|regex:/^[a-zA-Z0-9\s]+$/',
+        'type' => 'required',
+        'ref_ticket' => 'required|unique:tickets|starts_with:ref-',
+        'description' => 'required|string|regex:/^[a-zA-Z0-9\s]+$/',
+        'amount' => 'required|numeric|min:0',
+    ]);
+    // $ticket->payment()->associate($request->input('payment_id'));
+
+
+    $ticket = Ticket::create($request->all());
+
+    return redirect()->route('tickets.index');
+
+}
+/**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $payments = Payment::all();
+
+        $ticket = Ticket::find($id);
+
+        return view('pages.Ticket.edit',compact('ticket', 'payments'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+
+        $ticket = Ticket::find($id);
+        $request->validate([
+            'name_ticket' => 'required|string|max:255|regex:/^[a-zA-Z0-9\s]+$/',
+            'type' => 'required',
+            'ref_ticket' => 'required|unique:tickets|starts_with:ref-',
+            'description' => 'required|string|regex:/^[a-zA-Z0-9\s]+$/',
+            'amount' => 'required|numeric|min:0',
+        ]);
+ 
+        $ticket->amount = $request->amount;
+        $ticket->name_ticket = $request->name_ticket;
+        $ticket->type = $request->type;
+        $ticket->description = $request->description;
+        $ticket->ref_ticket= $request->ref_ticket;
+
+        $ticket->save();
+     
+        return redirect()->route('tickets.index')
+                        ->with('success','Ticket has Been updated successfully');
+    }
+
+     /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show( Ticket $ticket)
+    {
+        //$product = Product::find($id) ;
+        return view('pages.Ticket.show', compact('ticket'));
+    }
+     /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $ticket = Ticket::find($id) ;
+        $ticket->delete() ;
+        return redirect()->route('tickets.index')
+            ->with('success','Ticket deleted successfully') ;
+
     }
 
 
-
-//     public function generateTicketFromTransaction($transactionId)
-//     {
-//         // Recherchez le paiement en fonction de l'ID de transaction
-//         $payment = Payment::where('transaction_id', $transactionId)->first();
-
-//         // Vérifiez si le paiement existe
-//         if (!$payment) {
-//             return response()->json(['message' => 'Payment not found'], 404);
-//         }
-
-//         // Générez une chaîne de 20 chiffres de manière aléatoire
-//         $referenceTicket = '';
-//         for ($i = 0; $i < 20; $i++) {
-//             $referenceTicket .= rand(0, 9);
-//         }
-
-//         $ticket = new Ticket([
-//             'nom' => 'Nom par défaut', 
-//             'reference_ticket' => $referenceTicket, 
-//             'description' => 'Description par défaut', 
-//             'prix' => $payment->amount, 
-//             'start_event_date' => now(), 
-//             'end_event_date' => '2023-12-31', 
-//         ]);
-
-//         $ticket->save();
-
-//         return response()->json(['message' => 'Ticket generated successfully', 'ticket' => $ticket], 201);
-//     }
-
-//     public function createFromPayment(Request $request, $paymentId)
-// {
-//     // Récupérez le paiement existant
-//     $payment = Payment::find($paymentId);
-
-//     // Vérifiez si le paiement existe
-//     if (!$payment) {
-//         return redirect()->route('payments.index')->with('error', 'Le paiement n\'existe pas.');
-//     }
-
-//     // Créez un nouveau ticket en utilisant les données du paiement
-//     $ticketData = [
-//         'name' => 'Nom du ticket', // Remplacez par les données du paiement
-//         'ref_ticket' => 'Référence du ticket', // Remplacez par les données du paiement
-//         'description' => 'Description du ticket', // Remplacez par les données du paiement
-//         'amount' => $payment->amount,
-//         'start_event_date' => now(), // Remplacez par la date de l'événement souhaitée
-//         'end_event_date' => 'Durée du ticket', // Remplacez par les données du paiement
-//     ];
-
-//     $ticket = new Ticket($ticketData);
-
-//     // Associez le ticket au paiement
-//     $payment->tickets()->save($ticket);
-
-//     return redirect()->route('payments.show', $paymentId)->with('success', 'Ticket créé avec succès.');
-// }
+    private function isAdmin()
+    {
+        // Check if the authenticated user's 'role' attribute is 'admin'
+        return auth()->user()->role === 'admin';
+    }
 
 }

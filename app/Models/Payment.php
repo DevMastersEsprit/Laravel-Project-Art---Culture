@@ -9,11 +9,13 @@ class Payment extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'amount',
-        'payment_method',
-        'transaction_id',
-        'status',
-        'payment_date',
+       
+        'Card_Security_Code',
+        'Cardholder_Name',
+        'Card_Number',
+        'Card_Expiration_Date',
+        'Address', 
+        'payment_method'
     ];
     public function tickets()
 {
