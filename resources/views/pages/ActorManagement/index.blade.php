@@ -26,7 +26,7 @@
                         </div>
                     @endif
                     <div class="card-header pb-0">
-                        <a class="btn" style="color: #fb6340;" href="{{ route('actor-management.create') }}">Add New
+                        <a id="addActor" class="btn" style="color: #fb6340;">Add New
                             Artist</a>
                         <h6>List of Artists</h6>
                     </div>
@@ -149,6 +149,68 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div class="modal fade" id="addModal" tabindex="-1" role="dialog"
+                                                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"
+                                                    role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">
+                                                                Enter artist name to scrape information form the web
+                                                            </h5>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row mt-n6 mb-6">
+                                                                <div class="col-lg-12 col-sm-12 mt-5">
+                                                                    <div
+                                                                        class="card blur border border-white mb-4 shadow-xs">
+                                                                        <div class="card-body p-4">
+                                                                            <form action="{{ route('actor-management.create') }}"
+                                                                                method="GET" id="search-form">
+                                                                                <div
+                                                                                    class="ms-md-auto pe-md-3 d-flex align-items-center">
+                                                                                    <div class="input-group">
+                                                                                        <span
+                                                                                            class="input-group-text text-body"><i
+                                                                                                class="fas fa-search"
+                                                                                                aria-hidden="true"></i></span>
+                                                                                        <input style="width: 25%;"
+                                                                                            type="text"
+                                                                                            class="form-control"
+                                                                                            name="fullName"
+                                                                                            placeholder="Scrape Artist by name...">
+                                                                                    </div>
+                                                                                    <button
+                                                                                        style="margin-top: 4%; margin-left:3%;"
+                                                                                        type="submit"
+                                                                                        class="btn btn-sm btn-dark"
+                                                                                        id="searchButton">Search</button>
+                                                                                </div>
+                                                                            </form>
+                                                                            <div
+                                                                                class="ms-md-auto pe-md-3 d-flex align-items-center mt-4">
+                                                                                <p>If you don't want to scrape, skip this
+                                                                                    and
+                                                                                    click this button</p>
+                                                                                <a href="{{ route('actor-management.create') }}"
+                                                                                    style="margin-top: 4%; margin-left:3%;"
+                                                                                    type="submit"
+                                                                                    class="btn btn-sm btn-danger"
+                                                                                    id="searchButton">Skip</a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-dismiss="modal">Cancel</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -191,6 +253,23 @@
             $('#deleteConfirmationModal').on('click', '.btn-danger', function() {
                 $(this).off('click');
                 $(this).text('Deleting...');
+
+                $(this).closest('form').submit();
+            });
+        });
+
+        $('#addActor').on('click', function(e) {
+            e.preventDefault();
+
+            $('#addModal').modal('show');
+
+            $('#addModal').on('click', '.btn-secondary', function() {
+                $('#addModal').modal('hide');
+            });
+
+            $('#addModal').on('click', '.btn-danger', function() {
+                $(this).off('click');
+                $(this).text('Skipping...');
 
                 $(this).closest('form').submit();
             });

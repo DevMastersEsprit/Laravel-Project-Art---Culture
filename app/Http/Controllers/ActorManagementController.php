@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use \App\Models\Actor;
 use \App\Models\Domain;
 use App\Http\Requests\ActorRequest;
+use Goutte\Client;
 
 class ActorManagementController extends Controller
 {
@@ -25,10 +26,43 @@ class ActorManagementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         $domains = Domain::all();
-        return view('pages.ActorManagement.create', compact('domains'));
+        $imageElement = null;
+
+        if ($request->fullName) {
+            $fullName = $request->fullName;
+
+            $client = new Client();
+
+            $url = 'https://fr.wikipedia.org/wiki/' . $fullName;
+            $crawler = $client->request('GET', $url);
+
+            $imageElement = $crawler->filter('.infobox_v3 .images .mw-default-size .mw-file-description img')->first()->attr('src');
+
+            $tableTH = $crawler->filter('.infobox_v3 table')->filter('tbody tr')->each(function ($row) {
+                return $row->filter('th')->each(function ($cell) {
+                    return $cell->text();
+                });
+            });
+
+            $tableTD = $crawler->filter('.infobox_v3 table')->filter('tbody tr')->each(function ($row) {
+                return $row->filter('td')->each(function ($cell) {
+                    return $cell->text();
+                });
+            });
+
+            $data = new \stdClass();
+
+            foreach ($tableTH as $index => $key) {
+                $k = $key[0];
+                $data->$k = $tableTD[$index];
+            }
+
+            return view('pages.ActorManagement.create', compact('domains', 'fullName', 'imageElement', 'data'));
+        }
+        return view('pages.ActorManagement.create', compact('domains', 'imageElement'));
     }
 
     /**
@@ -161,5 +195,41 @@ class ActorManagementController extends Controller
         }
         $actor->delete();
         return redirect()->route('actor-management.index')->with('success', 'Actor is deleted with success !');
+    }
+
+    public function scrape(Request $request)
+    {
+        // $users = User::where('name', 'like', '%' . $keyword . '%')->get();
+
+        $fullName = $request->fullName;
+
+        $client = new Client();
+
+        $url = 'https://fr.wikipedia.org/wiki/' . $fullName;
+        $crawler = $client->request('GET', $url);
+
+        // $title = $crawler->filter('.infobox_v3 > .entete > div')->text();
+
+        $imageElement = $crawler->filter('.infobox_v3 .images .mw-default-size .mw-file-description img')->first()->attr('src');
+
+        $tableTH = $crawler->filter('.infobox_v3 table')->filter('tbody tr')->each(function ($row) {
+            return $row->filter('th')->each(function ($cell) {
+                return $cell->text();
+            });
+        });
+
+        $tableTD = $crawler->filter('.infobox_v3 table')->filter('tbody tr')->each(function ($row) {
+            return $row->filter('td')->each(function ($cell) {
+                return $cell->text();
+            });
+        });
+
+        $data = new \stdClass();
+
+        foreach ($tableTH as $index => $key) {
+            $k = $key[0];
+            $data->$k = $tableTD[$index];
+        }
+        return view('pages.actor-management.create', compact('fullName', 'imageElement', 'data'));
     }
 }
