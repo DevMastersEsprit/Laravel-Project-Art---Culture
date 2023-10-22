@@ -9,24 +9,27 @@ use App\Models\Payment;
 
 class TicketController extends Controller
 {
-    
-     /**
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-      
-        if ($this->isAdmin()) {
-            // For admin, retrieve all tickets from the database
-            $tickets = Ticket::all();
-            return view('pages.Ticket.index', compact('tickets'));
-        } else {
-            // For users, retrieve only their own tickets (adjust this part according to your user role logic)
-             $tickets = Ticket::all();
+        if (auth()->user()->role === 'admin') {
+            if ($this->isAdmin()) {
+                // For admin, retrieve all tickets from the database
+                $tickets = Ticket::all();
+                return view('pages.Ticket.index', compact('tickets'));
+            } else {
+                // For users, retrieve only their own tickets (adjust this part according to your user role logic)
+                $tickets = Ticket::all();
 
-            return view('pages.Ticket.indexuser', compact('tickets'));
+                return view('pages.Ticket.indexuser', compact('tickets'));
+            }
+        } else {
+            return redirect()->back();
         }
     }
     // public function index_admin() {
@@ -40,30 +43,37 @@ class TicketController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-public function create()
-{
-    $payments = Payment::all();
+    public function create()
+    {
+        if (auth()->user()->role === 'admin') {
+            $payments = Payment::all();
 
-    return view('pages.Ticket.create', compact('payments'));
-}
-public function store(Request $request)
-{
-    $request->validate([
-        'name_ticket' => 'required|string|max:255|regex:/^[a-zA-Z0-9\s]+$/',
-        'type' => 'required',
-        'ref_ticket' => 'required|unique:tickets|starts_with:ref-',
-        'description' => 'required|string|regex:/^[a-zA-Z0-9\s]+$/',
-        'amount' => 'required|numeric|min:0',
-    ]);
-    // $ticket->payment()->associate($request->input('payment_id'));
+            return view('pages.Ticket.create', compact('payments'));
+        } else {
+            return redirect()->back();
+        }
+    }
+    public function store(Request $request)
+    {
+        if (auth()->user()->role === 'admin') {
+            $request->validate([
+                'name_ticket' => 'required|string|max:255|regex:/^[a-zA-Z0-9\s]+$/',
+                'type' => 'required',
+                'ref_ticket' => 'required|unique:tickets|starts_with:ref-',
+                'description' => 'required|string|regex:/^[a-zA-Z0-9\s]+$/',
+                'amount' => 'required|numeric|min:0',
+            ]);
+            // $ticket->payment()->associate($request->input('payment_id'));
 
 
-    $ticket = Ticket::create($request->all());
+            $ticket = Ticket::create($request->all());
 
-    return redirect()->route('tickets.index');
-
-}
-/**
+            return redirect()->route('tickets.index');
+        } else {
+            return redirect()->back();
+        }
+    }
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -71,11 +81,15 @@ public function store(Request $request)
      */
     public function edit($id)
     {
-        $payments = Payment::all();
+        if (auth()->user()->role === 'admin') {
+            $payments = Payment::all();
 
-        $ticket = Ticket::find($id);
+            $ticket = Ticket::find($id);
 
-        return view('pages.Ticket.edit',compact('ticket', 'payments'));
+            return view('pages.Ticket.edit', compact('ticket', 'payments'));
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -87,40 +101,43 @@ public function store(Request $request)
      */
     public function update(Request $request, $id)
     {
+        if (auth()->user()->role === 'admin') {
+            $ticket = Ticket::find($id);
+            $request->validate([
+                'name_ticket' => 'required|string|max:255|regex:/^[a-zA-Z0-9\s]+$/',
+                'type' => 'required',
+                'ref_ticket' => 'required|unique:tickets|starts_with:ref-',
+                'description' => 'required|string|regex:/^[a-zA-Z0-9\s]+$/',
+                'amount' => 'required|numeric|min:0',
+            ]);
 
-        $ticket = Ticket::find($id);
-        $request->validate([
-            'name_ticket' => 'required|string|max:255|regex:/^[a-zA-Z0-9\s]+$/',
-            'type' => 'required',
-            'ref_ticket' => 'required|unique:tickets|starts_with:ref-',
-            'description' => 'required|string|regex:/^[a-zA-Z0-9\s]+$/',
-            'amount' => 'required|numeric|min:0',
-        ]);
- 
-        $ticket->amount = $request->amount;
-        $ticket->name_ticket = $request->name_ticket;
-        $ticket->type = $request->type;
-        $ticket->description = $request->description;
-        $ticket->ref_ticket= $request->ref_ticket;
+            $ticket->amount = $request->amount;
+            $ticket->name_ticket = $request->name_ticket;
+            $ticket->type = $request->type;
+            $ticket->description = $request->description;
+            $ticket->ref_ticket = $request->ref_ticket;
 
-        $ticket->save();
-     
-        return redirect()->route('tickets.index')
-                        ->with('success','Ticket has Been updated successfully');
+            $ticket->save();
+
+            return redirect()->route('tickets.index')
+                ->with('success', 'Ticket has Been updated successfully');
+        } else {
+            return redirect()->back();
+        }
     }
 
-     /**
+    /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show( Ticket $ticket)
+    public function show(Ticket $ticket)
     {
         //$product = Product::find($id) ;
         return view('pages.Ticket.show', compact('ticket'));
     }
-     /**
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -128,11 +145,14 @@ public function store(Request $request)
      */
     public function destroy($id)
     {
-        $ticket = Ticket::find($id) ;
-        $ticket->delete() ;
-        return redirect()->route('tickets.index')
-            ->with('success','Ticket deleted successfully') ;
-
+        if (auth()->user()->role === 'admin') {
+            $ticket = Ticket::find($id);
+            $ticket->delete();
+            return redirect()->route('tickets.index')
+                ->with('success', 'Ticket deleted successfully');
+        } else {
+            return redirect()->back();
+        }
     }
 
 

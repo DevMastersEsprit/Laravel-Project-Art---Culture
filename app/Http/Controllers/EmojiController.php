@@ -18,9 +18,12 @@ class EmojiController extends Controller
      */
     public function index()
     {
-        $emojis = Emoji::all();
-        return view('Emoji.index', compact('emojis'));
-    
+        if (auth()->user()->role === 'admin') {
+            $emojis = Emoji::all();
+            return view('Emoji.index', compact('emojis'));
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -41,35 +44,38 @@ class EmojiController extends Controller
      */
     public function store(Request $request)
     {
-        $emjValue = $request->emj;
-        $emojis = Emoji::all();
-        $exists = false;
+        if (auth()->user()->role === 'admin') {
+            $emjValue = $request->emj;
+            $emojis = Emoji::all();
+            $exists = false;
 
-        $request->validate([
-            'emj' => ['required', new EmojiValidationRule]
-        ]);
+            $request->validate([
+                'emj' => ['required', new EmojiValidationRule]
+            ]);
 
-        foreach ($emojis as $emoji) {
-            if ($emoji->emj === $emjValue) {
-                $exists = true;
-                break; 
+            foreach ($emojis as $emoji) {
+                if ($emoji->emj === $emjValue) {
+                    $exists = true;
+                    break;
+                }
             }
-        }
 
-        if ($exists) {
-            return redirect()->route('emoji.index')
-            ->withErrors(['emj' => 'The emj has already been taken.'])
-            ->withInput();
+            if ($exists) {
+                return redirect()->route('emoji.index')
+                    ->withErrors(['emj' => 'The emj has already been taken.'])
+                    ->withInput();
+            } else {
+                $emoji = new Emoji;
+
+                $emoji->emj = $request->emj;
+                $emoji->save();
+
+                return redirect()->route('emoji.index')
+                    ->with('success', 'Emoji added successfully.');
+            }
         } else {
-            $emoji = new Emoji;
-
-            $emoji->emj = $request->emj;
-            $emoji->save();
-
-            return redirect()->route('emoji.index')
-                            ->with('success','Emoji added successfully.');
+            return redirect()->back();
         }
-                    
     }
 
     /**
@@ -114,9 +120,13 @@ class EmojiController extends Controller
      */
     public function destroy($id)
     {
-        $emoji = Emoji::find($id) ;
-        $emoji->delete() ;
-        return redirect()->route('emoji.index')
-            ->with('success','Emoji deleted successfully') ;
+        if (auth()->user()->role === 'admin') {
+            $emoji = Emoji::find($id);
+            $emoji->delete();
+            return redirect()->route('emoji.index')
+                ->with('success', 'Emoji deleted successfully');
+        } else {
+            return redirect()->back();
+        }
     }
 }

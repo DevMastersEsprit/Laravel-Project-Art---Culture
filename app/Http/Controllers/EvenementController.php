@@ -16,8 +16,12 @@ class EvenementController extends Controller
      */
     public function index()
     {
-        $data['evenements'] = Evenement::paginate(5);
-        return view('evenements.index', $data);
+        if (auth()->user()->role === 'admin') {
+            $data['evenements'] = Evenement::paginate(5);
+            return view('evenements.index', $data);
+        } else {
+            return redirect()->back();
+        }
     }
 
     public function indexFront()
@@ -33,9 +37,14 @@ class EvenementController extends Controller
      */
     public function create()
     {
-        $data['actors'] = Actor::all();
-        $data['places'] = Place::all();
-        return view('evenements.create', $data);
+        if (auth()->user()->role === 'admin') {
+
+            $data['actors'] = Actor::all();
+            $data['places'] = Place::all();
+            return view('evenements.create', $data);
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -46,30 +55,35 @@ class EvenementController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'nom' => 'required|alpha',
-        //     'email' => 'required|email',
-        //     'address' => 'required'
-        // ]);
-        // dd($request->image);
+        if (auth()->user()->role === 'admin') {
 
-        $imageName = time().'.'.$request->image->extension();
-        $request->image->move(public_path('eventImages'), $imageName);
- 
-        $evenement = new Evenement;
-        
-        $evenement->nom = $request->nom;
-        $evenement->image = $request->imageName;
-        $evenement->date_debut = $request->dateDebut;
-        $evenement->date_fin = $request->dateFin;
-        $evenement->description = $request->description;
-        $evenement->places_id = $request->place_id;
-        $evenement->save();
+            // $request->validate([
+            //     'nom' => 'required|alpha',
+            //     'email' => 'required|email',
+            //     'address' => 'required'
+            // ]);
+            // dd($request->image);
 
-        $evenement->actors()->attach($request->input('actors'));
+            $imageName = time() . '.' . $request->image->extension();
+            $request->image->move(public_path('eventImages'), $imageName);
 
-        return redirect()->route('events.index')
-                        ->with('success','Event has been created successfully.');
+            $evenement = new Evenement;
+
+            $evenement->nom = $request->nom;
+            $evenement->image = $request->imageName;
+            $evenement->date_debut = $request->dateDebut;
+            $evenement->date_fin = $request->dateFin;
+            $evenement->description = $request->description;
+            $evenement->places_id = $request->place_id;
+            $evenement->save();
+
+            $evenement->actors()->attach($request->input('actors'));
+
+            return redirect()->route('events.index')
+                ->with('success', 'Event has been created successfully.');
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -81,7 +95,7 @@ class EvenementController extends Controller
     public function show($id)
     {
         $evenement = Evenement::with('articles')->find($id);
-        return view('evenements.show',compact('evenement'));
+        return view('evenements.show', compact('evenement'));
     }
 
     /**
@@ -92,8 +106,12 @@ class EvenementController extends Controller
      */
     public function edit($id)
     {
-        $evenement = Evenement::find($id);
-        return view('evenements.edit',compact('evenement'));
+        if (auth()->user()->role === 'admin') {
+            $evenement = Evenement::find($id);
+            return view('evenements.edit', compact('evenement'));
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -105,21 +123,25 @@ class EvenementController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $evenement = Evenement::find($id);
-        if (!is_string($request->image)) {
-            $imageName = time().'.'.$request->image->extension();
-            $request->image->move(public_path('eventImages'), $imageName);
-            $evenement->image = $imageName;
-        }
-        $evenement->nom = $request->nom;
-        $evenement->date_debut = $request->dateDebut;
-        $evenement->date_fin = $request->dateFin;
-        $evenement->description = $request->description;
+        if (auth()->user()->role === 'admin') {
+            $evenement = Evenement::find($id);
+            if (!is_string($request->image)) {
+                $imageName = time() . '.' . $request->image->extension();
+                $request->image->move(public_path('eventImages'), $imageName);
+                $evenement->image = $imageName;
+            }
+            $evenement->nom = $request->nom;
+            $evenement->date_debut = $request->dateDebut;
+            $evenement->date_fin = $request->dateFin;
+            $evenement->description = $request->description;
 
-        $evenement->save();
-     
-        return redirect()->route('events.index')
-                        ->with('success','Event Has Been updated successfully');
+            $evenement->save();
+
+            return redirect()->route('events.index')
+                ->with('success', 'Event Has Been updated successfully');
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -130,9 +152,13 @@ class EvenementController extends Controller
      */
     public function destroy($id)
     {
-        $evenement = Evenement::where('id', $id)->firstOrFail();
-        $evenement->delete();
-        return redirect()->route('events.index')
-                        ->with('success','Event has been deleted successfully');
+        if (auth()->user()->role === 'admin') {
+            $evenement = Evenement::where('id', $id)->firstOrFail();
+            $evenement->delete();
+            return redirect()->route('events.index')
+                ->with('success', 'Event has been deleted successfully');
+        } else {
+            return redirect()->back();
+        }
     }
 }

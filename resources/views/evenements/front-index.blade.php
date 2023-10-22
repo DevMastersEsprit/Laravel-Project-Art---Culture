@@ -90,8 +90,9 @@
                                                 alt="{{ $evenement->nom }}">
                                             <h3>{{ $evenement->nom }} </h3>
                                             <p>{{ $evenement->date_debut }} - {{ $evenement->date_fin }}</p>
-                                            {{ $evenement->description }}
+                                            <p>{{ $evenement->description }}</p>
                                         </a>
+                                        <a class="btn btn-outline-info" href="/events/{{ $evenement->id }}/places">View place</a>
                                     </div>
 
                                 </div>

@@ -5,67 +5,84 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Area;
 use App\Models\Place;
+
 class AreaController extends Controller
 {
     public function index()
     {
-        $areas = Area::all();
-        $places = Place::all(); // Retrieve all places from the database
+        if (auth()->user()->role === 'admin') {
+            $areas = Area::all();
+            $places = Place::all(); // Retrieve all places from the database
 
-        return view('pages.area-management', compact('areas', 'places')); // Send both areas and places to the view
+            return view('pages.area-management', compact('areas', 'places')); // Send both areas and places to the view
+        } else {
+            return redirect()->back();
+        }
     }
 
 
     public function create()
     {
-        return view('areas.create'); // Display the create area form
+        if (auth()->user()->role === 'admin') {
+            return view('areas.create'); // Display the create area form
+        } else {
+            return redirect()->back();
+        }
     }
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'capacity' => 'nullable|integer',
-            'description' => 'nullable|string',
-            'address' => 'nullable|string',
-            'city' => 'nullable|string',
-            'postal_code' => 'nullable|string',
-            'rental_cost' => 'nullable|numeric',
-            'availability' => 'nullable|boolean',
-            'places_id'=>'required'
-        ]);
+        if (auth()->user()->role === 'admin') {
+            $request->validate([
+                'name' => 'required|string|max:255',
+                'capacity' => 'nullable|integer',
+                'description' => 'nullable|string',
+                'address' => 'nullable|string',
+                'city' => 'nullable|string',
+                'postal_code' => 'nullable|string',
+                'rental_cost' => 'nullable|numeric',
+                'availability' => 'nullable|boolean',
+                'places_id' => 'required'
+            ]);
 
-        $data = $request->all();
+            $data = $request->all();
 
-        $room = Area::find($id);
+            $room = Area::find($id);
 
-        if (!$room) {
-            return redirect()->route('areas.index')->with('error', ' not found.');
+            if (!$room) {
+                return redirect()->route('areas.index')->with('error', ' not found.');
+            }
+
+            $room->update($data);
+
+            return redirect()->route('areas.index')->with('success', 'Area updated successfully.');
+        } else {
+            return redirect()->back();
         }
-
-        $room->update($data);
-
-        return redirect()->route('areas.index')->with('success', 'Area updated successfully.');
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'capacity' => 'required|integer',
-            'description' => 'nullable',
-            'address' => 'required',
+        if (auth()->user()->role === 'admin') {
+            $request->validate([
+                'name' => 'required|string',
+                'capacity' => 'required|integer',
+                'description' => 'nullable',
+                'address' => 'required',
 
-            'postal_code' => 'required|integer',
-            'rental_cost' => 'required|numeric',
-            'availability' => 'boolean',
-            'place_id' => 'nullable',
+                'postal_code' => 'required|integer',
+                'rental_cost' => 'required|numeric',
+                'availability' => 'boolean',
+                'place_id' => 'nullable',
 
 
-        ]);
+            ]);
 
-        $data=$request->all();
-        $place = Area::create($data);
-        return redirect()->route('areas.index');
+            $data = $request->all();
+            $place = Area::create($data);
+            return redirect()->route('areas.index');
+        } else {
+            return redirect()->back();
+        }
     }
 
 
@@ -73,15 +90,19 @@ class AreaController extends Controller
 
     public function destroy($id)
     {
-        $area = Area::find($id);
+        if (auth()->user()->role === 'admin') {
+            $area = Area::find($id);
 
-        if (!$area) {
-            return redirect()->route('areas.index')->with('error', 'Area not found.');
+            if (!$area) {
+                return redirect()->route('areas.index')->with('error', 'Area not found.');
+            }
+
+            $area->delete();
+
+            return redirect()->route('areas.index')->with('success', 'Area deleted successfully');
+        } else {
+            return redirect()->back();
         }
-
-        $area->delete();
-
-        return redirect()->route('areas.index')->with('success', 'Area deleted successfully');
     }
 
 

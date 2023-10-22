@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -28,8 +29,13 @@ class LoginController extends Controller
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $request->session()->regenerate();
+            $user = User::where('email',$request->email)->first();
+            if($user->role == 'admin') {
+                return redirect()->route('events.index');
 
-            return redirect()->intended('dashboard');
+            }
+            return redirect()->route('eventslist');
+            //return redirect()->intended('dashboard');
         }
 
         return back()->withErrors([

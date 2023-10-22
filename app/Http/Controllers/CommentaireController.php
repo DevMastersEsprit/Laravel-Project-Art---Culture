@@ -16,9 +16,13 @@ class CommentaireController extends Controller
      */
     public function index()
     {
-        $commentaires = Commentaire::with('emojis','user')->get();
-        $emojis = Emoji::all();
-        return view('Commentaire.index', compact('commentaires','emojis'));
+        if (auth()->user()->role === 'admin') {
+            $commentaires = Commentaire::with('emojis', 'user')->get();
+            $emojis = Emoji::all();
+            return view('Commentaire.index', compact('commentaires', 'emojis'));
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -39,23 +43,26 @@ class CommentaireController extends Controller
      */
     public function store(Request $request)
     {
-    
-        $request->validate([
-            'Content' => 'required|string|max:190'
-        ]);
+        if (auth()->user()->role === 'admin') {
+            $request->validate([
+                'Content' => 'required|string|max:190'
+            ]);
 
-        $commentaire = new Commentaire;
+            $commentaire = new Commentaire;
 
-        $commentaire->Content = $request->Content;
-        $commentaire->Likes = 0;
-        $commentaire->Dislikes = 0;
-        $commentaire->ReplyTo = "Nothing";
-        $commentaire->user_id = auth()->user()->id;
-        $commentaire->save();
+            $commentaire->Content = $request->Content;
+            $commentaire->Likes = 0;
+            $commentaire->Dislikes = 0;
+            $commentaire->ReplyTo = "Nothing";
+            $commentaire->user_id = auth()->user()->id;
+            $commentaire->save();
 
 
-        return redirect()->route('comment.index')
-                        ->with('success','Comment added successfully.');
+            return redirect()->route('comment.index')
+                ->with('success', 'Comment added successfully.');
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -77,8 +84,12 @@ class CommentaireController extends Controller
      */
     public function edit($id)
     {
-        $commentaire = Commentaire::with('emojis','user')->find($id);
-        return view('commentaire.edit',compact('commentaire'));
+        if (auth()->user()->role === 'admin') {
+            $commentaire = Commentaire::with('emojis', 'user')->find($id);
+            return view('commentaire.edit', compact('commentaire'));
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -90,23 +101,26 @@ class CommentaireController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'Content' => 'required|string|max:190'
-        ]);
+        if (auth()->user()->role === 'admin') {
+            $request->validate([
+                'Content' => 'required|string|max:190'
+            ]);
 
-        $commentaire = Commentaire::find($id);
+            $commentaire = Commentaire::find($id);
 
-        $commentaire->Content = $request->Content;
-        $commentaire->Likes = 0;
-        $commentaire->Dislikes = 0;
-        $commentaire->emojis()->detach();
+            $commentaire->Content = $request->Content;
+            $commentaire->Likes = 0;
+            $commentaire->Dislikes = 0;
+            $commentaire->emojis()->detach();
 
-        $commentaire->save();
+            $commentaire->save();
 
 
-        return redirect()->route('comment.index')
-                        ->with('success','Comment edited successfully.');
-    
+            return redirect()->route('comment.index')
+                ->with('success', 'Comment edited successfully.');
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -117,102 +131,114 @@ class CommentaireController extends Controller
      */
     public function destroy($id)
     {
-        $commentaire = Commentaire::find($id) ;
-        $commentaire->delete() ;
-        return redirect()->route('comment.index')
-            ->with('success','Comment deleted successfully') ;
+        if (auth()->user()->role === 'admin') {
+            $commentaire = Commentaire::find($id);
+            $commentaire->delete();
+            return redirect()->route('comment.index')
+                ->with('success', 'Comment deleted successfully');
+        } else {
+            return redirect()->back();
+        }
     }
     public function like($id)
     {
-        $commentaire = Commentaire::find($id) ;
-        $commentaire->Likes = $commentaire->Likes+1; 
+        $commentaire = Commentaire::find($id);
+        $commentaire->Likes = $commentaire->Likes + 1;
         $commentaire->save();
         return redirect()->route('comment.index');
-    
+
     }
     public function dislike($id)
     {
-        $commentaire = Commentaire::find($id) ;
-        $commentaire->Dislikes = $commentaire->Dislikes+1; 
+        $commentaire = Commentaire::find($id);
+        $commentaire->Dislikes = $commentaire->Dislikes + 1;
         $commentaire->save();
         return redirect()->route('comment.index');
-    
+
     }
-    
+
     public function addEmoji(Request $request)
     {
-        
-        $commentId = $request->input('commentId');
-        $emojiEmj = $request->input('emojiEmj');
+        if (auth()->user()->role === 'admin') {
+            $commentId = $request->input('commentId');
+            $emojiEmj = $request->input('emojiEmj');
 
-        
 
-        if($emojiEmj == null){
-            return redirect()->route('comment.index')
-            ->with('errorEmj','Choose Emj') ;
-        }else{
-            $commentaire = Commentaire::find($commentId) ;
-        
-            $selectedEmojis = null;
-            $emojis = Emoji::all();
-            foreach ($emojis as $emoji) {
-                if ($emoji->emj == $emojiEmj) {
-                    $selectedEmojis = $emoji;
+
+            if ($emojiEmj == null) {
+                return redirect()->route('comment.index')
+                    ->with('errorEmj', 'Choose Emj');
+            } else {
+                $commentaire = Commentaire::find($commentId);
+
+                $selectedEmojis = null;
+                $emojis = Emoji::all();
+                foreach ($emojis as $emoji) {
+                    if ($emoji->emj == $emojiEmj) {
+                        $selectedEmojis = $emoji;
+                    }
+                }
+                if ($selectedEmojis == null) {
+                    return redirect()->route('comment.index')
+                        ->with('errorEmj', 'Choose Emj from list');
+                } else {
+                    //$commentaire->emojis()->sync([$selectedEmojis->id => ['user_id' => auth()->user()->id]],false);
+                    DB::table('commentaire_emoji')->updateOrInsert(
+                        [
+                            'commentaire_id' => $commentId,
+                            'user_id' => auth()->user()->id,
+                        ],
+                        [
+                            'emoji_id' => $selectedEmojis->id,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ]
+                    );
+                    return redirect()->route('comment.index');
                 }
             }
-            if($selectedEmojis == null){
-                return redirect()->route('comment.index')
-                ->with('errorEmj','Choose Emj from list') ;
-            }else{ 
-                //$commentaire->emojis()->sync([$selectedEmojis->id => ['user_id' => auth()->user()->id]],false);
-                DB::table('commentaire_emoji')->updateOrInsert(
-                    [
-                        'commentaire_id' => $commentId,
-                        'user_id' => auth()->user()->id,
-                    ],
-                    [
-                        'emoji_id' => $selectedEmojis->id,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ]
-                );
-                return redirect()->route('comment.index');
-            }
+        } else {
+            return redirect()->back();
         }
-        
     }
 
     public function removeEmoji(Request $request)
     {
+        if (auth()->user()->role === 'admin') {
+            $cId = $request->input('cId');
+            $commentaire = Commentaire::find($cId);
+            $commentaire->emojis()
+                ->wherePivot('user_id', auth()->user()->id)
+                ->detach();
 
-        $cId = $request->input('cId');
-        $commentaire = Commentaire::find($cId);
-        $commentaire->emojis()
-        ->wherePivot('user_id', auth()->user()->id)
-        ->detach();
-
-        return redirect()->route('comment.index');
+            return redirect()->route('comment.index');
+        } else {
+            return redirect()->back();
+        }
     }
     public function replay(Request $request)
     {
-    
-        $request->validate([
-            'ContentReplay' => 'required|string|max:190'
-        ]);
+        if (auth()->user()->role === 'admin') {
+            $request->validate([
+                'ContentReplay' => 'required|string|max:190'
+            ]);
 
-        $commentaire = new Commentaire;
+            $commentaire = new Commentaire;
 
-        $commentaire->Content = $request->ContentReplay;
-        $commentaire->Likes = 0;
-        $commentaire->Dislikes = 0;
-        $commentaire->ReplyTo = "Comment";
-        $commentaire->parent_comment_id=$request->rcId;
-        $commentaire->user_id = auth()->user()->id;
-        $commentaire->save();
+            $commentaire->Content = $request->ContentReplay;
+            $commentaire->Likes = 0;
+            $commentaire->Dislikes = 0;
+            $commentaire->ReplyTo = "Comment";
+            $commentaire->parent_comment_id = $request->rcId;
+            $commentaire->user_id = auth()->user()->id;
+            $commentaire->save();
 
 
-        return redirect()->route('comment.index')
-                        ->with('success','Comment added successfully.');
+            return redirect()->route('comment.index')
+                ->with('success', 'Comment added successfully.');
+        } else {
+            return redirect()->back();
+        }
     }
 
 }

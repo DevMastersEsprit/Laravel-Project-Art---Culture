@@ -14,10 +14,14 @@ class DomainController extends Controller
      */
     public function index()
     {
-        $domains = Domain::all();
-        $actorsByDomain = Domain::with('actors')->orderBy('name')->get();
+        if (auth()->user()->role === 'admin') {
+            $domains = Domain::all();
+            $actorsByDomain = Domain::with('actors')->orderBy('name')->get();
 
-        return view ('pages.DomainManagement.index', compact('domains'), compact('actorsByDomain')) ;
+            return view('pages.DomainManagement.index', compact('domains'), compact('actorsByDomain'));
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -27,7 +31,11 @@ class DomainController extends Controller
      */
     public function create()
     {
-        return view('pages.DomainManagement.create');
+        if (auth()->user()->role === 'admin') {
+            return view('pages.DomainManagement.create');
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -37,20 +45,24 @@ class DomainController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
-        $domain = new Domain([
-            "name" => $request->get('name'),
-            "description" => $request->get('description')
-        ]);
+    {
+        if (auth()->user()->role === 'admin') {
+            $domain = new Domain([
+                "name" => $request->get('name'),
+                "description" => $request->get('description')
+            ]);
 
-        $request->validate([
-            'name' => 'required|max:20',
-            'description' => 'required'
-        ]);
+            $request->validate([
+                'name' => 'required|max:20',
+                'description' => 'required'
+            ]);
 
-        $domain->save();
+            $domain->save();
 
-        return redirect()->route('domain-management.index')->with('success', 'Domain is added successfully !');
+            return redirect()->route('domain-management.index')->with('success', 'Domain is added successfully !');
+        } else {
+            return redirect()->back();
+        }
     }
 
     /**
@@ -61,12 +73,16 @@ class DomainController extends Controller
      */
     public function show($id)
     {
-        $domain = Domain::find($id);
+        if (auth()->user()->role === 'admin') {
+            $domain = Domain::find($id);
 
-        if (!$domain) {
-            return redirect()->route('domain-management.index')->with('error', 'Domain not found !');
+            if (!$domain) {
+                return redirect()->route('domain-management.index')->with('error', 'Domain not found !');
+            }
+            return view('pages.DomainManagement.domain', compact('domain'));
+        } else {
+            return redirect()->back();
         }
-        return view('pages.DomainManagement.domain', compact('domain'));
     }
 
     /**
@@ -77,13 +93,17 @@ class DomainController extends Controller
      */
     public function edit($id)
     {
-        $domain = Domain::find($id);
+        if (auth()->user()->role === 'admin') {
+            $domain = Domain::find($id);
 
-        if (!$domain) {
-            return redirect()->route('domain-management.index')->with('error', 'Domain not found !');
+            if (!$domain) {
+                return redirect()->route('domain-management.index')->with('error', 'Domain not found !');
+            }
+
+            return view('pages.DomainManagement.edit', compact('domain'), compact('domain'));
+        } else {
+            return redirect()->back();
         }
-
-        return view('pages.DomainManagement.edit', compact('domain'), compact('domain'));
     }
 
     /**
@@ -95,22 +115,26 @@ class DomainController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if ($id) {
-            $domain = Domain::find($id);
+        if (auth()->user()->role === 'admin') {
+            if ($id) {
+                $domain = Domain::find($id);
 
-            $request->validate([
-                'name' => 'required|max:20',
-                'description' => 'required'
-            ]);
-            
-            $domain->name = $request->name;
-            $domain->description = $request->description;
-            $domain->save();
+                $request->validate([
+                    'name' => 'required|max:20',
+                    'description' => 'required'
+                ]);
 
-            return redirect()->route('domain-management.index')->with('success', 'Domain is updated successfully !');
-            
+                $domain->name = $request->name;
+                $domain->description = $request->description;
+                $domain->save();
+
+                return redirect()->route('domain-management.index')->with('success', 'Domain is updated successfully !');
+
+            } else {
+                return redirect()->route('domain-management.index')->with('error', 'Domain not found !');
+            }
         } else {
-            return redirect()->route('domain-management.index')->with('error', 'Domain not found !');
+            return redirect()->back();
         }
     }
 
@@ -122,11 +146,15 @@ class DomainController extends Controller
      */
     public function destroy($id)
     {
-        $domain = Domain::find($id);
-        if (!$domain) {
-            return redirect()->route('domain-management.index')->with('error', 'Domain not found !');
+        if (auth()->user()->role === 'admin') {
+            $domain = Domain::find($id);
+            if (!$domain) {
+                return redirect()->route('domain-management.index')->with('error', 'Domain not found !');
+            }
+            $domain->delete();
+            return redirect()->route('domain-management.index')->with('success', 'Domain is deleted with success !');
+        } else {
+            return redirect()->back();
         }
-        $domain->delete();
-        return redirect()->route('domain-management.index')->with('success', 'Domain is deleted with success !');
     }
 }
