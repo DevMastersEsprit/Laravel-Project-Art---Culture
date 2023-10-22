@@ -82,6 +82,10 @@ Route::resource('/domain-management', DomainController::class);
 
 Route::get('/artists', [ArtistInformation::class, 'index']);
 
+Route::get('/search-artist', [ArtistInformation::class, 'scrape'])->name('search-artist');
+
+// Route::post('/search-artist', [ActorManagementController::class, 'scrape'])->name('search-artist');
+
 Route::get('/', function () {
     return redirect('/dashboard');
 })->middleware('auth');

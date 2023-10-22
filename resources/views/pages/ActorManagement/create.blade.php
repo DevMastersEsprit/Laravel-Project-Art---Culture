@@ -5,7 +5,159 @@
         <div class="row">
             <div class="col-12">
                 <div class="card mb-4 p-4">
-                    <h2>Add a new Artist</h2>
+                    <div class="row">
+                        <h2>Add a new Artist</h2>
+                        @if ($imageElement)
+                            @if ($imageElement !== null)
+                                <div class="table-responsive p-4">
+                                    <table class="table align-items-center justify-content-center mb-0">
+                                        <tbody>
+                                            <img src="{{ $imageElement }}" alt="bruce" id="preview">
+                                            @foreach ($data as $key => $value)
+                                                <tr>
+                                                    <p class="text-sm font-weight-normal mb-0">
+                                                        @if ($key == 'Naissance')
+                                                            <div class="text-secondary font-weight-semibold opacity-7">
+                                                                {{ $key }} : </div>
+                                                            {{ $value[0] }}
+                                                        @endif
+                                                    </p>
+                                                </tr>
+                                                <tr>
+                                                    <p class="text-sm font-weight-normal mb-0">
+                                                        @if ($key == 'Nom de naissance')
+                                                            <div class="text-secondary font-weight-semibold opacity-7">
+                                                                {{ $key }} : </div>
+                                                            {{ $value[0] }}
+                                                        @endif
+                                                    </p>
+                                                </tr>
+                                                <tr>
+                                                    <span class="text-sm font-weight-normal">
+                                                        @if ($key == 'Pseudonyme')
+                                                            <div class="text-secondary font-weight-semibold opacity-7">
+                                                                {{ $key }} : </div>
+                                                            {{ $value[0] }}
+                                                        @endif
+                                                    </span>
+                                                </tr>
+                                                <tr>
+                                                    <p class="text-sm font-weight-normal mb-0">
+                                                        @if ($key == 'Nationalité')
+                                                            <div class="text-secondary font-weight-semibold opacity-7">
+                                                                {{ $key }} : </div>
+                                                            {{ $value[0] }}
+                                                        @endif
+                                                    </p>
+                                                </tr>
+                                                <tr>
+                                                    <span class="text-sm font-weight-normal">
+                                                        @if ($key == 'Formation')
+                                                            <div class="text-secondary font-weight-semibold opacity-7">
+                                                                {{ $key }} : </div>
+                                                            {{ $value[0] }}
+                                                        @endif
+                                                    </span>
+                                                </tr>
+                                                <tr>
+                                                    <p class="text-sm font-weight-normal mb-0">
+                                                        @if ($key == 'Activité')
+                                                            <div class="text-secondary font-weight-semibold opacity-7">
+                                                                {{ $key }} : </div>
+                                                            {{ $value[0] }}
+                                                        @endif
+                                                    </p>
+                                                </tr>
+                                                <tr>
+                                                    <span class="text-sm font-weight-normal">
+                                                        @if ($key == 'Activité')
+                                                            <div class="text-secondary font-weight-semibold opacity-7">
+                                                                {{ $key }} : </div>
+                                                            {{ $value[0] }}
+                                                        @endif
+                                                    </span>
+                                                </tr>
+                                                <tr>
+                                                    <p class="text-sm font-weight-normal mb-0">
+                                                        @if ($key == "Période d'activité")
+                                                            <div class="text-secondary font-weight-semibold opacity-7">
+                                                                {{ $key }} : </div>
+                                                            {{ $value[0] }}
+                                                        @endif
+                                                    </p>
+                                                </tr>
+                                                <tr>
+                                                    <span class="text-sm font-weight-normal">
+                                                        @if ($key == 'Conjoint')
+                                                            <div class="text-secondary font-weight-semibold opacity-7">
+                                                                {{ $key }} : </div>
+                                                            {{ $value[0] }}
+                                                        @endif
+                                                    </span>
+                                                </tr>
+                                                <tr>
+                                                    <p class="text-sm font-weight-normal mb-0">
+                                                        @if ($key == 'Enfant')
+                                                            <div class="text-secondary font-weight-semibold opacity-7">
+                                                                {{ $key }} : </div>
+                                                            {{ $value[0] }}
+                                                        @endif
+                                                    </p>
+                                                </tr>
+                                                <tr>
+                                                    <span class="text-sm font-weight-normal">
+                                                        @if ($key == 'Instruments')
+                                                            <div class="text-secondary font-weight-semibold opacity-7">
+                                                                {{ $key }} : </div>
+                                                            {{ $value[0] }}
+                                                        @endif
+                                                    </span>
+                                                </tr>
+                                                <tr>
+                                                    <p class="text-sm font-weight-normal mb-0">
+                                                        @if ($key == 'Genres artistiques')
+                                                            <div class="text-secondary font-weight-semibold opacity-7">
+                                                                {{ $key }} : </div>
+                                                            {{ $value[0] }}
+                                                        @endif
+                                                    </p>
+                                                </tr>
+                                                <tr>
+                                                    <span class="text-sm font-weight-normal">
+                                                        @if ($key == 'Site web')
+                                                            <div class="text-secondary font-weight-semibold opacity-7">
+                                                                {{ $key }} : </div> <a
+                                                                href="https://fr.wikipedia.org/wiki/{{ $value[0] }}">{{ $key }}
+                                                                {{ $value[0] }}</a>
+                                                        @endif
+                                                    </span>
+                                                </tr>
+                                                <tr>
+                                                    <p class="text-sm font-weight-normal mb-0">
+                                                        @if ($key == 'Films notables')
+                                                            <div class="text-secondary font-weight-semibold opacity-7">
+                                                                {{ $key }} : </div>
+                                                            {{ $value[0] }}
+                                                        @endif
+                                                    </p>
+                                                </tr>
+                                                <tr>
+                                                    <span class="text-sm font-weight-normal">
+                                                        @if ($key == 'Discographie')
+                                                            <div class="text-secondary font-weight-semibold opacity-7">
+                                                                {{ $key }} : </div> <a
+                                                                href="https://fr.wikipedia.org/wiki/{{ $value[0] }}">
+                                                                {{ $value[0] }}</a>
+                                                        @endif
+                                                    </span>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            @endif
+                        @endif
+                    </div>
                     <form action="{{ route('actor-management.store') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group">
@@ -63,7 +215,8 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Phone Number</label>
-                            <input name="phoneNumber" type="text" class="form-control" placeholder="Enter phone number">
+                            <input name="phoneNumber" type="text" class="form-control"
+                                placeholder="Enter phone number">
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Social Connections</label>
@@ -75,7 +228,8 @@
                         </div>
                         <div class="form-group">
                             <label for="exampleInputPassword1">Availability</label>
-                            <input name="availability" type="text" class="form-control" placeholder="Enter availability">
+                            <input name="availability" type="text" class="form-control"
+                                placeholder="Enter availability">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
