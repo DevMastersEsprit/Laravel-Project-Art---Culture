@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Actor;
+use App\Models\Commentaire;
+use App\Models\Emoji;
 use App\Models\Evenement;
 use App\Models\Place;
 use Illuminate\Http\Request;
@@ -95,7 +97,9 @@ class EvenementController extends Controller
     public function show($id)
     {
         $evenement = Evenement::with('articles')->find($id);
-        return view('evenements.show', compact('evenement'));
+        $commentaires = Commentaire::orderBy('updated_at', 'desc')->get();
+        $emojis = Emoji::all();
+        return view('evenements.show',compact('evenement','commentaires','emojis'));
     }
 
     /**

@@ -78,6 +78,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/comment/addEmoji', [CommentaireController::class, 'addEmoji'])->name('addEmoji');
     Route::post('/comment/removeEmoji', [CommentaireController::class, 'removeEmoji'])->name('removeEmoji');
     Route::post('/comment/replay', [CommentaireController::class, 'replay'])->name('commentReplay');
+    Route::post('/comment/commentonEvent', [CommentaireController::class, 'commentonEvent'])->name('commentonEvent');
     Route::put('/comment/like/{id}', [CommentaireController::class, 'like'])->name("like");
     Route::put('/comment/dislike/{id}', [CommentaireController::class, 'dislike'])->name("dislike");
     Route::get('/virtual-reality', [PageController::class, 'vr'])->name('virtual-reality');

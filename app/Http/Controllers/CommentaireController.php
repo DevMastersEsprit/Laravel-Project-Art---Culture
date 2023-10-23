@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Commentaire;
 use App\Models\Emoji;
+use App\Models\Evenement;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -16,9 +17,9 @@ class CommentaireController extends Controller
      */
     public function index()
     {
+        $emojis = Emoji::all();
         if (auth()->user()->role === 'admin') {
-            $commentaires = Commentaire::with('emojis', 'user')->get();
-            $emojis = Emoji::all();
+            $commentaires = Commentaire::with('emojis', 'user')->orderBy('updated_at', 'desc')->get();
             return view('Commentaire.index', compact('commentaires', 'emojis'));
         } else {
             return redirect()->back();
@@ -43,6 +44,7 @@ class CommentaireController extends Controller
      */
     public function store(Request $request)
     {
+        
         if (auth()->user()->role === 'admin') {
             $request->validate([
                 'Content' => 'required|string|max:190'
@@ -88,7 +90,8 @@ class CommentaireController extends Controller
             $commentaire = Commentaire::with('emojis', 'user')->find($id);
             return view('commentaire.edit', compact('commentaire'));
         } else {
-            return redirect()->back();
+            $commentaire = Commentaire::with('emojis', 'user')->find($id);
+            return view('commentaire.editfront', compact('commentaire'));
         }
     }
 
@@ -101,7 +104,6 @@ class CommentaireController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (auth()->user()->role === 'admin') {
             $request->validate([
                 'Content' => 'required|string|max:190'
             ]);
@@ -116,6 +118,7 @@ class CommentaireController extends Controller
             $commentaire->save();
 
 
+        if (auth()->user()->role === 'admin') {
             return redirect()->route('comment.index')
                 ->with('success', 'Comment edited successfully.');
         } else {
@@ -131,9 +134,9 @@ class CommentaireController extends Controller
      */
     public function destroy($id)
     {
-        if (auth()->user()->role === 'admin') {
             $commentaire = Commentaire::find($id);
             $commentaire->delete();
+        if (auth()->user()->role === 'admin') {
             return redirect()->route('comment.index')
                 ->with('success', 'Comment deleted successfully');
         } else {
@@ -145,7 +148,14 @@ class CommentaireController extends Controller
         $commentaire = Commentaire::find($id);
         $commentaire->Likes = $commentaire->Likes + 1;
         $commentaire->save();
-        return redirect()->route('comment.index');
+        if (auth()->user()->role === 'user') {
+            $evenement = Evenement::with('articles')->find($commentaire->evenement_id);
+            $commentaires = Commentaire::all();
+            $emojis = Emoji::all();
+            return view('evenements.show',compact('evenement','commentaires','emojis'));
+        }else{
+            return redirect()->route('comment.index');
+        }
 
     }
     public function dislike($id)
@@ -153,13 +163,19 @@ class CommentaireController extends Controller
         $commentaire = Commentaire::find($id);
         $commentaire->Dislikes = $commentaire->Dislikes + 1;
         $commentaire->save();
-        return redirect()->route('comment.index');
+        if (auth()->user()->role === 'user') {
+            $evenement = Evenement::with('articles')->find($commentaire->evenement_id);
+            $commentaires = Commentaire::all();
+            $emojis = Emoji::all();
+            return view('evenements.show',compact('evenement','commentaires','emojis'));
+        }else{
+            return redirect()->route('comment.index');
+        }
 
     }
 
     public function addEmoji(Request $request)
     {
-        if (auth()->user()->role === 'admin') {
             $commentId = $request->input('commentId');
             $emojiEmj = $request->input('emojiEmj');
 
@@ -182,7 +198,6 @@ class CommentaireController extends Controller
                     return redirect()->route('comment.index')
                         ->with('errorEmj', 'Choose Emj from list');
                 } else {
-                    //$commentaire->emojis()->sync([$selectedEmojis->id => ['user_id' => auth()->user()->id]],false);
                     DB::table('commentaire_emoji')->updateOrInsert(
                         [
                             'commentaire_id' => $commentId,
@@ -194,31 +209,39 @@ class CommentaireController extends Controller
                             'updated_at' => now(),
                         ]
                     );
-                    return redirect()->route('comment.index');
+                    if (auth()->user()->role === 'user') {
+                        $evenement = Evenement::with('articles')->find($commentaire->evenement_id);
+                        $commentaires = Commentaire::all();
+                        $emojis = Emoji::all();
+                        return view('evenements.show',compact('evenement','commentaires','emojis'))->with('success','Comment added successfully.');
+                    }else{
+                        return redirect()->route('comment.index');
+                    }
                 }
             }
-        } else {
-            return redirect()->back();
-        }
+        
+            
     }
 
     public function removeEmoji(Request $request)
     {
-        if (auth()->user()->role === 'admin') {
             $cId = $request->input('cId');
             $commentaire = Commentaire::find($cId);
             $commentaire->emojis()
                 ->wherePivot('user_id', auth()->user()->id)
                 ->detach();
 
+        if (auth()->user()->role === 'user') {
+            $evenement = Evenement::with('articles')->find($commentaire->evenement_id);
+            $commentaires = Commentaire::all();
+            $emojis = Emoji::all();
+            return view('evenements.show',compact('evenement','commentaires','emojis'))->with('success','Comment added successfully.');
+        }else{
             return redirect()->route('comment.index');
-        } else {
-            return redirect()->back();
         }
     }
     public function replay(Request $request)
     {
-        if (auth()->user()->role === 'admin') {
             $request->validate([
                 'ContentReplay' => 'required|string|max:190'
             ]);
@@ -234,10 +257,42 @@ class CommentaireController extends Controller
             $commentaire->save();
 
 
+                
+        if (auth()->user()->role === 'admin') {
             return redirect()->route('comment.index')
                 ->with('success', 'Comment added successfully.');
         } else {
-            return redirect()->back();
+            $evenement = Evenement::with('articles')->find($request->reId);
+            $commentaires = Commentaire::all();
+            $emojis = Emoji::all();
+            return view('evenements.show',compact('evenement','commentaires','emojis'))->with('success','Comment added successfully.');
+        }
+    }
+    
+    public function commentonEvent(Request $request)
+    {
+    
+        $request->validate([
+            'ContentEvent' => 'required|string|max:190'
+        ]);
+
+        $commentaire = new Commentaire;
+
+        $commentaire->Content = $request->ContentEvent;
+        $commentaire->Likes = 0;
+        $commentaire->Dislikes = 0;
+        $commentaire->ReplyTo = "Event";
+        $commentaire->evenement_id=$request->reId;
+        $commentaire->user_id = auth()->user()->id;
+        $commentaire->save();
+
+        if (auth()->user()->role === 'user') {
+            $evenement = Evenement::with('articles')->find($request->reId);
+            $commentaires = Commentaire::all();
+            $emojis = Emoji::all();
+            return view('evenements.show',compact('evenement','commentaires','emojis'))->with('success','Comment added successfully.');
+        }else{
+            return redirect()->route('commentaires.index')->with('success','Comment added successfully.');
         }
     }
 
