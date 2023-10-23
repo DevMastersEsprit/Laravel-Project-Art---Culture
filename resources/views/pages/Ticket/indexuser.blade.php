@@ -1,6 +1,6 @@
 @extends('layouts.front-office')
-
 <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg" style="margin-left:20%">
+
     <div class="container-fluid py-4 px-5">
         <div class="row">
             <div class="col-12">
@@ -22,7 +22,7 @@
                                 <h6 class="font-weight-semibold text-lg mb-0">Tickets list</h6>
                                 <p class="text-sm">See information about all our available tickets</p>
                             </div>
-                            <div class="ms-auto d-flex">
+                            {{-- <div class="ms-auto d-flex">
                                 <button type="button" class="btn btn-sm btn-white me-2">
                                     View all your tickets
                                 </button>
@@ -35,7 +35,7 @@
                                     </span>
                                     <span class="btn-inner--text">Add member</span>
                                 </button>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                     <div class="card-body px-0 py-0">
