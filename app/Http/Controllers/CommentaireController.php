@@ -17,8 +17,8 @@ class CommentaireController extends Controller
      */
     public function index()
     {
-        $emojis = Emoji::all();
         if (auth()->user()->role === 'admin') {
+            $emojis = Emoji::all();
             $commentaires = Commentaire::with('emojis', 'user')->orderBy('updated_at', 'desc')->get();
             return view('Commentaire.index', compact('commentaires', 'emojis'));
         } else {

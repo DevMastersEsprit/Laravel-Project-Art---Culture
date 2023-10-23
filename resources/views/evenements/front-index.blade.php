@@ -9,6 +9,25 @@
                 <li class="breadcrumb-item text-sm text-white active" aria-current="page">Events</li>
             </ol>
             <h6 class="font-weight-bolder text-white mb-0">Events</h6>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link" href="/event/list">Events</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/artists">Artiste</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/payments">Payments</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/tickets">Tickets</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Disabled</a>
+                  </li>
+                </ul>
+              </div>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
             <div class="ms-md-auto pe-md-3 d-flex align-items-center">

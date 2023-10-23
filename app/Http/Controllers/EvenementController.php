@@ -72,7 +72,7 @@ class EvenementController extends Controller
             $evenement = new Evenement;
 
             $evenement->nom = $request->nom;
-            $evenement->image = $request->imageName;
+            $evenement->image = $imageName;
             $evenement->date_debut = $request->dateDebut;
             $evenement->date_fin = $request->dateFin;
             $evenement->description = $request->description;

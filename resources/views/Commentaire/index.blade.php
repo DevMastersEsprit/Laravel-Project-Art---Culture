@@ -9,7 +9,7 @@
 </div>
 @endif
 
-<div class="card shadow-lg mx-4 card-profile-bottom">
+{{-- <div class="card shadow-lg mx-4 card-profile-bottom">
     <div class="card-body p-3">
         <div class="row gx-4">
             <div class="col-auto">
@@ -55,10 +55,10 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <div class="container-fluid py-4">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col">
             <div class="card">
                 <div class="card-header pb-0">
                     <form action="{{ route('comment.store') }}" method="POST">
@@ -66,7 +66,7 @@
                         <div class="d-flex align-items-center row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="example-text-input" class="form-control-label">Comment content</label>
+                                    <label for="example-text-input" class="form-control-label">Discussion</label>
                                     <textarea class="form-control" rows="3" type="text" name="Content"></textarea>
                                     @error('Content')
                                     <div class="alert alert-danger mt-1 mb-1">{{ $message }}</div>
@@ -79,7 +79,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <button class="btn btn-primary btn-sm ms-auto">Add Comment</button>
+                                <button class="btn btn-primary btn-sm ms-auto">Add message</button>
                             </div>
 
                             @if(count($emojis)<=0) <div style="color:white;" class="alert alert-info">
@@ -91,7 +91,7 @@
             </div>
             <div class="card-body">
                 <hr class="horizontal dark">
-                <p class="text-uppercase text-sm">All Comments </p>
+                <p class="text-uppercase text-sm">All messages </p>
                 @if ($commentaires->count() > 0)
                 @foreach ($commentaires as $comment)
                 @if($comment->ReplyTo == "Nothing")
@@ -100,11 +100,11 @@
                 @endforeach
             </div>
             @else
-            No comment yet
+            No messages yet
             @endif
         </div>
     </div>
-    <div class="col-md-4">
+    {{-- <div class="col-md-4">
         <div class="card card-profile">
             <img src="{{ asset('img/bg-profile.jpg') }}" alt="Image placeholder" class="card-img-top">
             <div class="row justify-content-center">
@@ -159,7 +159,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 </div>
 @include('layouts.footers.auth.footer')
 </div>
