@@ -172,7 +172,7 @@
     <div class="col-12">
     <div class="alert alert-light d-flex justify-content-between align-items-center" role="alert">
     <span>This feature is available in <strong>Argon Dashboard 2 Pro Laravel</strong>. Check it <strong><a href="https://www.creative-tim.com/product/argon-dashboard-pro-laravel" target="_blank">here</a></strong></span>
-    <a class="btn btn-primary btn-sm"  target="_blank" type="button" href="{{ route('tickets.create') }}">Add a ticket</a>
+  
     <a class="btn btn-primary btn-sm"  target="_blank" type="button" href="{{ route('tickets.create') }}">view all tickets</a>
 </div>
 
@@ -184,48 +184,34 @@
     <div class="table-responsive p-0">
     <table class="table align-items-center mb-0">
     <thead>
-    <tr>
-    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">Name</th>
-    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 align-middle text-center">Ticket_Ref
-    </th>
-    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">Description</th>
-    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">Amount</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">
- Action</th>
-
-    </tr>
+        <tr>
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">Name</th>
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 align-middle text-center">Ticket_Ref</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">Description</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">Amount</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 align-middle text-center">Action</th>
+        </tr>
     </thead>
     <tbody>
-    <tr>
-      @foreach ($tickets as $ticket)
-      
-                    <tr>
-                        <td class=" align-middle text-center">{{ $ticket->name_ticket}}</td>
-                        <td class=" align-middle text-center">{{ $ticket->ref_ticket }}</td>
-                        <td class=" align-middle text-center">{{ $ticket-> description}}</td>
-                        <td class=" align-middle text-center">{{ $ticket->amount}}</td>
-
-                        <td class=" align-middle text-center">{{ $ticket->type }}</td>
-                        <td class=" align-middle text-center">
-                                                    
-                                                <a class="text-sm font-weight-bold mb-0" href="{{ route('tickets.edit', $ticket->id) }}">Edit</a>
-                                                 <td><form action="{{ route('tickets.destroy', $ticket->id) }}" method="POST" style="display: inline">
+        @foreach ($tickets as $ticket)
+            <tr>
+                <td class="align-middle text-center">{{ $ticket->name_ticket }}</td>
+                <td class="align-middle text-center">{{ $ticket->ref_ticket }}</td>
+                <td class="align-middle text-center">{{ $ticket->description }}</td>
+                <td class="align-middle text-center">{{ $ticket->amount }}</td>
+                <td class="align-middle text-center">
+                    <a class="btn btn-primary btn-sm" href="{{ route('tickets.edit', $ticket->id) }}">Edit</a>
+                    <form action="{{ route('tickets.destroy', $ticket->id) }}" method="POST" style="display: inline">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-primary btn-sm" type="link" onclick="return confirm('Are you sure you want to delete this payment?')">Delete</button>
-                    </form></td>
-
-                   <td class="align-middle text-center">
-    <a class="btn btn-primary btn-sm" href="{{ route('tickets.show', $ticket->id) }}">Details</a>
-</td>
-                                                    </td>
-
-
-                    </tr>
-                @endforeach
-    </tr>
+                        <button class="btn btn-primary btn-sm" type="submit" onclick="return confirm('Are you sure you want to delete this ticket?')">Delete</button>
+                    </form>
+                    <a class="btn btn-primary btn-sm" href="{{ route('tickets.show', $ticket->id) }}">Details</a>
+                </td>
+            </tr>
+        @endforeach
     </tbody>
-    </table>
+</table>
     </div>
     </div>
     </div>

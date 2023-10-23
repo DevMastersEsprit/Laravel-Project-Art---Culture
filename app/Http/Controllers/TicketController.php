@@ -6,6 +6,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Ticket;
 use App\Models\Payment;
+use App\Models\Evenement;
+
 
 class TicketController extends Controller
 {
@@ -45,8 +47,9 @@ class TicketController extends Controller
     {
         if (auth()->user()->role === 'admin') {
             $payments = Payment::all();
+            $evenements = Evenement::all();
 
-            return view('pages.Ticket.create', compact('payments'));
+            return view('pages.Ticket.create', compact('payments','evenements'));
         } else {
             return redirect()->back();
         }
@@ -81,10 +84,10 @@ class TicketController extends Controller
     {
         if (auth()->user()->role === 'admin') {
             $payments = Payment::all();
-
+            $evenements = Evenement::all();
             $ticket = Ticket::find($id);
 
-            return view('pages.Ticket.edit', compact('ticket', 'payments'));
+            return view('pages.Ticket.edit', compact('ticket', 'payments', 'evenements'));
         } else {
             return redirect()->back();
         }
@@ -159,5 +162,7 @@ class TicketController extends Controller
         // Check if the authenticated user's 'role' attribute is 'admin'
         return auth()->user()->role === 'admin';
     }
+    
+    
 
 }

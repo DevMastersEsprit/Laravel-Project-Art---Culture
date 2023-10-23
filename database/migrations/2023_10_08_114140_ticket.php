@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('name_ticket');
             $table->string('ref_ticket');
             $table->text('description'); 
+
             $table->string('type', 50);
             $table->decimal('amount', 10, 2); 
             $table->unsignedBigInteger('payments_id')->nullable();

@@ -80,6 +80,18 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
+                                    <label for="evenement_id" class="form-control-label">Event</label>
+                                    <select class="form-control" name="evenement_id">
+                                        @foreach ($evenements as $event)
+                                        <option value="{{ $event->id }}" {{ old('evenement_id', $event->evenement_id) == $event->id ? 'selected' : '' }}>
+                                            {{ $event->nom }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
                                     <label for="ref_ticket" class="form-control-label">Ticket reference</label>
                                     <input class="form-control" type="text" name="ref_ticket" value="{{ old('ref_ticket', $ticket->ref_ticket) }}" placeholder="Enter the reference" onfocus="focused(this)" onfocusout="defocused(this)">
                                     @error('ref_ticket')
