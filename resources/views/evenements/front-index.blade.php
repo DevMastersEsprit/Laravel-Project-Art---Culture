@@ -23,9 +23,6 @@
                   <li class="nav-item">
                     <a class="nav-link" href="/tickets">Tickets</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link disabled" href="#">Disabled</a>
-                  </li>
                 </ul>
               </div>
         </nav>
@@ -111,7 +108,9 @@
                                             <p>{{ $evenement->date_debut }} - {{ $evenement->date_fin }}</p>
                                             <p>{{ $evenement->description }}</p>
                                         </a>
-                                        <a class="btn btn-outline-info" href="/events/{{ $evenement->id }}/places">View place</a>
+                                        @if($evenement->places_id)
+                                            <a class="btn btn-outline-info" href="/events/{{ $evenement->id }}/places">View place</a>
+                                        @endif
                                     </div>
 
                                 </div>

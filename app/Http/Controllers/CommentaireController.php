@@ -286,14 +286,10 @@ class CommentaireController extends Controller
         $commentaire->user_id = auth()->user()->id;
         $commentaire->save();
 
-        if (auth()->user()->role === 'user') {
             $evenement = Evenement::with('articles')->find($request->reId);
             $commentaires = Commentaire::all();
             $emojis = Emoji::all();
             return view('evenements.show',compact('evenement','commentaires','emojis'))->with('success','Comment added successfully.');
-        }else{
-            return redirect()->route('commentaires.index')->with('success','Comment added successfully.');
-        }
+        
     }
-
 }

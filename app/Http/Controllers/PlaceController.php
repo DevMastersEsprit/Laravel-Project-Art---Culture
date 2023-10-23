@@ -39,7 +39,7 @@ class PlaceController extends Controller
                 'capacity' => 'nullable|integer',
                 'description' => 'nullable|string',
                 'category' => 'nullable|string',
-                'facilities' => 'nullable|array',
+                'facilities' => 'nullable|string',
                 'accessibility' => 'nullable|string',
                 'internal_rules' => 'nullable|string',
                 'photos' => 'nullable|array',
