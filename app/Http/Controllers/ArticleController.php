@@ -61,7 +61,7 @@ class ArticleController extends Controller
 
             $article = new Article;
             $article->titre = $request->title;
-            $article->image = $request->image;
+            $article->image = $imageName;
             $article->description = $request->description;
             $article->contenu = $request->content;
             $article->evenement_id = $request->event_id;

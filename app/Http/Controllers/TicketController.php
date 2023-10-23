@@ -17,20 +17,18 @@ class TicketController extends Controller
      */
     public function index()
     {
-        if (auth()->user()->role === 'admin') {
-            if ($this->isAdmin()) {
-                // For admin, retrieve all tickets from the database
-                $tickets = Ticket::all();
-                return view('pages.Ticket.index', compact('tickets'));
-            } else {
-                // For users, retrieve only their own tickets (adjust this part according to your user role logic)
-                $tickets = Ticket::all();
 
-                return view('pages.Ticket.indexuser', compact('tickets'));
-            }
+        if ($this->isAdmin()) {
+            // For admin, retrieve all tickets from the database
+            $tickets = Ticket::all();
+            return view('pages.Ticket.index', compact('tickets'));
         } else {
-            return redirect()->back();
+            // For users, retrieve only their own tickets (adjust this part according to your user role logic)
+            $tickets = Ticket::all();
+
+            return view('pages.Ticket.indexuser', compact('tickets'));
         }
+
     }
     // public function index_admin() {
     //     $tickets = Ticket::all();
