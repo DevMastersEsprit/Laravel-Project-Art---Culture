@@ -113,6 +113,7 @@
                     <span class="nav-link-text ms-1">Sign Up</span>
                 </a>
             </li>
+            
         </ul>
     </div>
     <div class="sidenav-footer mx-3 ">

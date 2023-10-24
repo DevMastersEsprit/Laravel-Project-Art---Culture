@@ -55,6 +55,7 @@
                                     </select>
                                 </div>
                             </div>
+    
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="payments_id" class="form-control-label">Payment</label>
@@ -65,6 +66,17 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="evenement_id" class="form-control-label">Event</label>
+                                    <select class="form-control" name="evenement_id" id="evenement_id">
+                                        @foreach ($evenements as $event)
+                                        <option value="{{ $event->id }}">{{ $event->nom }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="ref_ticket" class="form-control-label">Ticket reference</label>

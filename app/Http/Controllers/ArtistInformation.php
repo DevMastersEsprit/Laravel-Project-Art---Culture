@@ -19,6 +19,9 @@ class ArtistInformation extends Controller
     {
         $fullName = $request->fullName;
         $results = Actor::where('fullName', 'like', "%$fullName%")->get();
+        if (!$results) {
+            return redirect()->route('pages.FrontOffice.artistsInfo')->with('error', 'Artist with this name is not found !');
+        }
         return view('pages.FrontOffice.artistByName', compact('results', 'fullName'));
     }
 
@@ -34,8 +37,6 @@ class ArtistInformation extends Controller
 
             $url = 'https://fr.wikipedia.org/wiki/' . $fullName;
             $crawler = $client->request('GET', $url);
-
-            // $title = $crawler->filter('.infobox_v3 > .entete > div')->text();
 
             $imageElement = $crawler->filter('.infobox_v3 .images .mw-default-size .mw-file-description img')->first()->attr('src');
 

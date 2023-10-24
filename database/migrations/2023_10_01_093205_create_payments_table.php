@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->decimal('Card_Security_Code', 10);
             $table->string('Cardholder_Name', 50);
-            $table->decimal('Card_Number');
+            $table->decimal('Card_Number', 20);
             $table->timestamp('Card_Expiration_Date');
             $table->string('Address', 20);
             $table->string('payment_method', 20);

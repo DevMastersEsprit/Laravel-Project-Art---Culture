@@ -1,3 +1,5 @@
+@extends('layouts.front-office')
+<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg" style="margin-left:20%">
 
     <div class="container">
         <h1>Payment Details</h1>
@@ -14,4 +16,4 @@
             </div>
         </div>
     </div>
-
+</main>

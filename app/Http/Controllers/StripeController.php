@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Ticket;
 
 class StripeController extends Controller
 {
@@ -38,6 +39,6 @@ class StripeController extends Controller
 
     public function success()
     {
-        return "Yay, It works!!!";
+        return view('Stripe.success');
     }
 }
